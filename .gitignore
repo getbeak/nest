@@ -1,0 +1,15 @@
+# Node
+node_modules/
+
+# Environment
+.vscode/
+
+# TS/Webpack/React/Electron transpiling nonsense
+dist-electron/
+dist/
+dist-ts/
+dist-react/
+tsconfig.tsbuildinfo
+
+# Beak
+.beak
