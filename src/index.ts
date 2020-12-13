@@ -1,9 +1,9 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 
 // Example event https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html
 
-export const handle = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-	const url = event.requestContext.path;
+export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+	const url = event.rawPath;
 	const urlSafe = url.toLowerCase();
 
 	switch (true) {
