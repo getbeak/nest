@@ -7,11 +7,17 @@
   "files": [
     "dist"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
+    "compile": "tsc -b tsconfig.json",
+    "deploy": "./node_modules/.bin/lambda ./nest.lambda"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.66",
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^3.6.0",
+    "aws-lambda": "^1.0.6",
     "eslint": "^7.4.0",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-simple-import-sort": "^5.0.3",

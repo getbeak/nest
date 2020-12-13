@@ -1,0 +1,23 @@
+{
+	"PATH": "./dist",
+	"AWS_KEY": { "Ref": "env.AWS_ACCESS_KEY_ID" },
+	"AWS_SECRET": { "Ref": "env.AWS_SECRET_ACCESS_KEY" },
+	"AWS_REGION": "eu-west-2",
+
+	"FunctionName": "beak-nest",
+	"Role": "arn:aws:iam::384149253021:role/service-role/beak-nest-role-bzphtz7n",
+	"Runtime": "nodejs12.x",
+	"Handler": "index.handler",
+	"MemorySize": "128",
+	"Timeout": "5",
+	"Environment": {
+		"Variables": {
+			"BEAK_KEYGEN_ACCOUNT_ID": { "Ref": "env.BEAK_KEYGEN_ACCOUNT_ID" },
+			"BEAK_KEYGEN_PRODUCT_ID": { "Ref": "env.BEAK_KEYGEN_PRODUCT_ID" },
+			"BEAK_KEYGEN_USER_TOKEN": { "Ref": "env.BEAK_KEYGEN_USER_TOKEN" }
+		}
+	},
+	"Layers": [],
+	"Tags": {},
+	"Description": ""
+}
