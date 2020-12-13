@@ -1,3 +1,3 @@
 # Nest
 
-Serverless API for auto update, release , and licensing management.
+Serverless API for auto updates, releases, and license management.
