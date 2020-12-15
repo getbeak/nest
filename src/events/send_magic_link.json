@@ -1,0 +1,38 @@
+{
+	"version": "2.0",
+	"routeKey": "ANY /1/2020-12-14/send_magic_link",
+	"rawPath": "/1/2020-12-14/send_magic_link",
+	"rawQueryString": "",
+	"cookies": [],
+	"body": "{\"client_id\": \"client_000000C2kdCzNlbL1BqR5FeMatItU\",\"redirect_uri\": \"https:\/\/magic.getbeak.app\/callback\",\"state\": \"lx\/rAzKFsThZ+pqne+uCQZ2OamjZtpW_GtdtUwvEaAg7t\",\"code_challenge_method\": \"S256\",\"code_challenge\": \"ec088e759677e0f799ccbe2b3a667c16037af08b0e3dff8732edbe1f42f6ef1c\",\"identifier_type\": \"email\",\"identifier_value\": \"example@getbeak.app\"}",
+	"headers": {
+		"accept": "application/json",
+		"content-length": "0",
+		"host": "nest.getbeak.app",
+		"upgrade-insecure-requests": "1",
+		"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
+		"x-amzn-trace-id": "Root=1-5e6722a7-cc56xmpl46db7ae02d4da47e",
+		"x-forwarded-for": "205.255.255.176",
+		"x-forwarded-port": "443",
+		"x-forwarded-proto": "https"
+	},
+	"requestContext": {
+		"accountId": "1234567890",
+		"apiId": "d98dmsdlov",
+		"domainName": "d98dmsdlov.execute-api.eu-west-2.amazonaws.com",
+		"domainPrefix": "d98dmsdlov",
+		"http": {
+			"method": "POST",
+			"path": "/1/2020-12-14/send_magic_link",
+			"protocol": "HTTP/1.2",
+			"sourceIp": "205.255.255.176",
+			"userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
+		},
+		"requestId": "JKJaXmPLvHcESHA=",
+		"routeKey": "ANY /1/2020-12-14/send_magic_link",
+		"stage": "default",
+		"time": "14/Dec/2020:11:00:00 +0000",
+		"timeEpoch": 1583817383220
+	},
+	"isBase64Encoded": true
+}

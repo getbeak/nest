@@ -1,0 +1,51 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+
+	"required": [
+		"client_id",
+		"redirect_uri",
+		"state",
+		"code_challenge_method",
+		"code_challenge",
+		"identifier_type",
+		"identifier_value"
+	],
+
+	"properties": {
+		"client_id": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"redirect_uri": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"state": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"code_challenge_method": {
+			"type": "string",
+			"enum": ["S256"]
+		},
+
+		"code_challenge": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"identifier_type": {
+			"type": "string",
+			"enum": ["email"]
+		},
+
+		"identifier_value": {
+			"type": "string",
+			"minLength": 1
+		}
+	}
+}

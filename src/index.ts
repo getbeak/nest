@@ -1,28 +1,45 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
+import { Logger } from 'tslog';
+import Squawk from 'util/squawk';
 
-// Example event https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html
+import sendMagicLinkEvent from './events/send_magic_link.json';
+import router from './rpc/router';
+
+const events = {
+	sendMagicLink: sendMagicLinkEvent,
+};
+
+const logger = new Logger();
 
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
-	const url = event.rawPath;
-	const urlSafe = url.toLowerCase();
+	try {
+		const response = await router(logger, event);
 
-	switch (true) {
-		case urlSafe.startsWith('/download/'): // /download/:platform/:file
-			return { statusCode: 200, body: 'download!' };
+		if (!response)
+			return { statusCode: 204 };
 
-		case urlSafe.startsWith('/latest/'): // /latest/:platform/:extension
-			return { statusCode: 200, body: 'latest!' };
+		return {
+			statusCode: 200,
+			body: JSON.stringify(response),
+			headers: {
+				'content-type': 'application/json',
+			},
+		};
+	} catch (error) {
+		logger.error(error);
 
-		case urlSafe.startsWith('/update/'): // /update/:platform/:extension/:version
-			return { statusCode: 200, body: 'update!' };
+		const squawk = Squawk.isSquawk(error) ? error : Squawk.coerce(error);
 
-		case urlSafe.startsWith('/releases/'): // /releases/:platform/:extension/:version
-			return { statusCode: 200, body: 'releases!' };
-
-		default:
-			return {
-				statusCode: 404,
-				body: 'This is not the request you are looking for. Visit https://getbeak.app! 🐦',
-			};
+		return {
+			statusCode: 500,
+			body: JSON.stringify(squawk),
+			headers: {
+				'content-type': 'application/json',
+			},
+		};
 	}
+};
+
+export const run = async () => {
+	await handler(events.sendMagicLink as APIGatewayProxyEventV2);
 };
