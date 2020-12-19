@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "dist/index",
   "types": "dist/index",
-  "type": "module",
   "files": [
     "dist"
   ],
@@ -12,11 +11,12 @@
     "clean": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
     "compile": "tsc -b tsconfig.json",
     "start": "tsc -b tsconfig.json -w",
-    "run": "node -e \"require('./dist').run()\"",
+    "demo": "node -e \"require('./dist').run()\"",
     "deploy": "./node_modules/.bin/lambda ./nest.lambda"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.66",
+    "@types/ioredis": "^4.17.9",
     "@types/jsonschema": "^1.1.1",
     "@types/node": "^14.14.13",
     "@typescript-eslint/eslint-plugin": "^4.0.0",
@@ -28,9 +28,13 @@
     "typescript": "^4.0.3"
   },
   "dependencies": {
-    "aws-sdk": "^2.809.0",
+    "@aws-sdk/client-ses": "^3.0.0",
+    "@cuvva/ksuid": "^1.0.0",
+    "camelcase-keys": "^6.2.2",
+    "ioredis": "^4.19.4",
     "jsonschema": "^1.4.0",
     "node-fetch": "^2.6.1",
+    "snakecase-keys": "^3.2.1",
     "tslog": "^3.0.1"
   }
 }
