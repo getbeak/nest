@@ -1,17 +1,18 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import camelCaseKeys from 'camelcase-keys';
 import { validate } from 'jsonschema';
 import { Logger } from 'tslog';
-import { Context, VersionSet, VersionSets } from 'types';
-import Squawk from 'util/squawk';
 
-import sendMagicLink from './send-magic-link';
+import { App, Context, VersionSet, VersionSets } from '../types';
+import Squawk from '../utils/squawk';
+import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
 
 const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/gm;
 
 const v20201214: VersionSet = {
 	send_magic_link: {
 		impl: sendMagicLink,
-		schema: null,
+		schema: sendMagicLinkSchema,
 	},
 };
 
@@ -19,7 +20,7 @@ const versionSets: VersionSets = {
 	'2020-12-14': v20201214,
 };
 
-const router = async (logger: Logger, event: APIGatewayProxyEventV2): Promise<Record<string, any>> => {
+const router = async (logger: Logger, app: App, event: APIGatewayProxyEventV2): Promise<Record<string, any>> => {
 	const method = event.requestContext.http.method.toUpperCase();
 
 	if (!method)
@@ -37,15 +38,25 @@ const router = async (logger: Logger, event: APIGatewayProxyEventV2): Promise<Re
 		throw new Squawk('not_found');
 
 	const { impl, schema } = runtime;
+	const ctx: Context = {
+		app,
+		auth: null,
+		logger,
+		request: {
+			awsRequestId: event.requestContext.requestId,
+			clientIp: event.requestContext.http.sourceIp,
+			userAgent: event.requestContext.http.userAgent,
+		},
+	};
 
-	// TODO(afr): Populate context
-	const ctx: Context = {};
 	let request: any = null;
 
 	if (event.body !== void 0) {
-		request = JSON.parse(event.body);
+		const originalRequest = JSON.parse(event.body);
 
-		validate(request, schema, { throwError: true });
+		validate(originalRequest, schema, { throwError: true });
+
+		request = camelCaseKeys(originalRequest);
 	}
 
 	return await impl(ctx, request);
@@ -57,7 +68,7 @@ function parsePath(path: string) {
 	if (!matches)
 		throw new Squawk('malformed_url');
 
-	const [baseVersion, dateVersion, endpoint] = matches;
+	const [, baseVersion, dateVersion, endpoint] = matches;
 
 	if (baseVersion !== '1')
 		throw new Squawk('unknown_version', { supportedVersion: '1' });

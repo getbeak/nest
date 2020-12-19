@@ -4,7 +4,7 @@
 	"rawPath": "/1/2020-12-14/send_magic_link",
 	"rawQueryString": "",
 	"cookies": [],
-	"body": "{\"client_id\": \"client_000000C2kdCzNlbL1BqR5FeMatItU\",\"redirect_uri\": \"https:\/\/magic.getbeak.app\/callback\",\"state\": \"lx\/rAzKFsThZ+pqne+uCQZ2OamjZtpW_GtdtUwvEaAg7t\",\"code_challenge_method\": \"S256\",\"code_challenge\": \"ec088e759677e0f799ccbe2b3a667c16037af08b0e3dff8732edbe1f42f6ef1c\",\"identifier_type\": \"email\",\"identifier_value\": \"example@getbeak.app\"}",
+	"body": "{\"client_id\": \"client_000000C2kdCzNlbL1BqR5FeMatItU\",\"redirect_uri\": \"https:\/\/magic.getbeak.app\/callback\",\"state\": \"lx\/rAzKFsThZ+pqne+uCQZ2OamjZtpW_GtdtUwvEaAg7t\",\"code_challenge_method\": \"S256\",\"code_challenge\": \"ec088e759677e0f799ccbe2b3a667c16037af08b0e3dff8732edbe1f42f6ef1c\",\"identifier_type\": \"email\",\"identifier_value\": \"info@getbeak.app\"}",
 	"headers": {
 		"accept": "application/json",
 		"content-length": "0",

@@ -10,7 +10,8 @@
     "moduleResolution": "node",
     "module": "CommonJS",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true // temp, remove this. stupid aws
   },
   "include": [
     "src/**/*.ts"
