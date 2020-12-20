@@ -1,8 +1,8 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import jwt from 'jsonwebtoken';
 
-import { App, JWT } from '../types';
-import Squawk from '../utils/squawk';
+import { App, JWT } from '../../types';
+import Squawk from '../../utils/squawk';
 
 export default async function handleAuth(app: App, event: APIGatewayProxyEventV2) {
 	// ofc it's fucking case sensitive
