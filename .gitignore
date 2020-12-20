@@ -5,10 +5,7 @@ node_modules/
 .vscode/
 
 # TS/Webpack/React/Electron transpiling nonsense
-dist-electron/
 dist/
-dist-ts/
-dist-react/
 tsconfig.tsbuildinfo
 
 # Beak

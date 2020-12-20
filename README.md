@@ -32,7 +32,7 @@ Sends a magic link enabling a user to authenticate!
 - `redirect_uri`: The redirect URI to return too, whitelisted against the client.
 - `state`: A web/url safe nonce generated and stored against the challenge for each requested.
 - `code_challenge_method`: Always `S256`.
-- `code_challenge`: A SHA256 digest of the code verifier, which is send in `authenticate_user`.
+- `code_challenge`: A SHA256 digest of the code verifier, which is send in `authenticate_user`. Websafe base64 encoded.
 - `identifier_type`: Always `email`.
 - `identifier_value`: The email address to send the magic link too.
 
