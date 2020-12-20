@@ -74,4 +74,20 @@ Authenticates a user upon receiving the magic link from above.
 
 ### `get_subscription_status`
 
-Effectively a heartbeat request to check the status of the user's subscription. No payload nor response, but will return an error if their subscription has expired.
+Effectively a heartbeat request to check the status of the user's subscription etc.
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C2kg4d9HyP1Bg09HBF4Bm40"
+}
+```
+
+#### Response
+
+```json
+{
+	"subscription": "beak_alpha"
+}
+```

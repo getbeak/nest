@@ -1,10 +1,10 @@
 {
 	"version": "2.0",
-	"routeKey": "ANY /1/2020-12-14/authenticate_user",
-	"rawPath": "/1/2020-12-14/authenticate_user",
+	"routeKey": "ANY /1/2020-12-14/get_subscription_status",
+	"rawPath": "/1/2020-12-14/get_subscription_status",
 	"rawQueryString": "",
 	"cookies": [],
-	"body": "{\"client_id\": \"client_000000C2kdCzNlbL1BqR5FeMatItU\",\"grant_type\": \"authorization_code\",\"redirect_uri\": \"https:\/\/magic.getbeak.app\/callback\",\"code\": \"authzcode_000000C2zZTxhLP49ZO59DUrolIuW.40bb1b1ecdcf258d6dea06ff13387402ec38125339f741859dae2b3a0168f5ba\",\"code_verifier\": \"tulum2020-lol\"}",
+	"body": "{\"user_id\": \"user_000000C2zEcKm4LJl1NvweqcqW6l6\"}",
 	"headers": {
 		"accept": "application/json",
 		"content-length": "0",
@@ -14,7 +14,8 @@
 		"x-amzn-trace-id": "Root=1-5e6722a7-cc56xmpl46db7ae02d4da47e",
 		"x-forwarded-for": "205.255.255.176",
 		"x-forwarded-port": "443",
-		"x-forwarded-proto": "https"
+		"x-forwarded-proto": "https",
+		"authorization": "bearer eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJ2IjoiMSIsImp0aSI6ImFjc3Rva18wMDAwMDBDMnpaWFZIcnhNaEtjeWdVdnRaUVBCbyIsInN1YiI6InVzZXJfMDAwMDAwQzJ6RWNLbTRMSmwxTnZ3ZXFjcVc2bDYiLCJhdWQiOiJjbGllbnRfMDAwMDAwQzJrZEN6TmxiTDFCcVI1RmVNYXRJdFUiLCJpYXQiOjE2MDg1MDU0MjYsImV4cCI6MTYwODUwOTAyNn0.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEuOqGwQpoRwATnrNZaufBlgM6Kf-jDONPXG3lVTxM4rAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL-LcfccbePQKu0D0NspHZzGNtb-44_OZU6GCAIjAXK2"
 	},
 	"requestContext": {
 		"accountId": "1234567890",
@@ -23,13 +24,13 @@
 		"domainPrefix": "d98dmsdlov",
 		"http": {
 			"method": "POST",
-			"path": "/1/2020-12-14/authenticate_user",
+			"path": "/1/2020-12-14/get_subscription_status",
 			"protocol": "HTTP/1.2",
 			"sourceIp": "205.255.255.176",
 			"userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
 		},
 		"requestId": "JKJaXmPLvHcESHA=",
-		"routeKey": "ANY /1/2020-12-14/authenticate_user",
+		"routeKey": "ANY /1/2020-12-14/get_subscription_status",
 		"stage": "default",
 		"time": "14/Dec/2020:11:00:00 +0000",
 		"timeEpoch": 1583817383220

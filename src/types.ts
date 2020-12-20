@@ -20,7 +20,7 @@ export interface App {
 
 export interface Context {
 	app: App;
-	auth: null;
+	auth: null | string;
 	logger: Logger;
 	request: {
 		clientIp: string;
@@ -38,6 +38,15 @@ export interface VersionSet {
 		impl: (ctx: Context, request: any) => void | any;
 		schema: Record<string, unknown>;
 	};
+}
+
+export interface JWT {
+	v: '1';
+	jti: string;
+	sub: string;
+	aud: string;
+	iat: number;
+	exp: number;
 }
 
 export type GrantType = 'authorization_code' | 'refresh_token' | 'access_token';
@@ -73,4 +82,12 @@ export interface AuthenticateUserResponse {
 	refreshToken: string;
 	userId: string;
 	clientId: string;
+}
+
+export interface GetSubscriptionStatusRequest {
+	userId: string;
+}
+
+export interface GetSubscriptionStatusResponse {
+	subscription: 'beak_alpha';
 }

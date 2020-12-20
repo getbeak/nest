@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 import { AuthenticateUserRequest, Context, Grant } from '../types';
 import Squawk from '../utils/squawk';
-import getOrCreateUser from './get-or-create-user';
+import { getOrCreateUser } from './stripe-users';
 
 export async function validateAuthorizationCode(ctx: Context, request: AuthenticateUserRequest) {
 	const [authCode, authKey, ...spare] = request.code.split('.');

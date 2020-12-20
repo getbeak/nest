@@ -4,8 +4,10 @@ import { validate } from 'jsonschema';
 import { Logger } from 'tslog';
 
 import { App, Context, VersionSet, VersionSets } from '../types';
+import handleAuth from '../middleware/auth';
 import Squawk from '../utils/squawk';
 import authenticateUser, { authenticateUserSchema } from './authenticate-user';
+import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
 
 const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/gm;
@@ -18,6 +20,10 @@ const v20201214: VersionSet = {
 	authenticate_user: {
 		impl: authenticateUser,
 		schema: authenticateUserSchema,
+	},
+	get_subscription_status: {
+		impl: getSubscriptionStatus,
+		schema: getSubscriptionStatusSchema,
 	},
 };
 
@@ -45,7 +51,7 @@ const router = async (logger: Logger, app: App, event: APIGatewayProxyEventV2): 
 	const { impl, schema } = runtime;
 	const ctx: Context = {
 		app,
-		auth: null,
+		auth: await handleAuth(app, event),
 		logger,
 		request: {
 			awsRequestId: event.requestContext.requestId,
