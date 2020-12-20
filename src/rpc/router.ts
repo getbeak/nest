@@ -5,6 +5,7 @@ import { Logger } from 'tslog';
 
 import { App, Context, VersionSet, VersionSets } from '../types';
 import Squawk from '../utils/squawk';
+import authenticateUser, { authenticateUserSchema } from './authenticate-user';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
 
 const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/gm;
@@ -13,6 +14,10 @@ const v20201214: VersionSet = {
 	send_magic_link: {
 		impl: sendMagicLink,
 		schema: sendMagicLinkSchema,
+	},
+	authenticate_user: {
+		impl: authenticateUser,
+		schema: authenticateUserSchema,
 	},
 };
 

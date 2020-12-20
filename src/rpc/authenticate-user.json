@@ -1,0 +1,39 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+
+	"required": [
+		"client_id",
+		"grant_type",
+		"redirect_uri",
+		"code",
+		"code_verifier"
+	],
+
+	"properties": {
+		"client_id": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"grant_type": {
+			"type": "string",
+			"enum": ["authorization_code"]
+		},
+
+		"redirect_uri": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"code": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"code_verifier": {
+			"type": "string",
+			"minLength": 1
+		}
+	}
+}

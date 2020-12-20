@@ -1,10 +1,10 @@
 {
 	"version": "2.0",
-	"routeKey": "ANY /1/2020-12-14/send_magic_link",
-	"rawPath": "/1/2020-12-14/send_magic_link",
+	"routeKey": "ANY /1/2020-12-14/authenticate_user",
+	"rawPath": "/1/2020-12-14/authenticate_user",
 	"rawQueryString": "",
 	"cookies": [],
-	"body": "{\"client_id\": \"client_000000C2kdCzNlbL1BqR5FeMatItU\",\"redirect_uri\": \"https:\/\/magic.getbeak.app\/callback\",\"state\": \"lx\/rAzKFsThZ+pqne+uCQZ2OamjZtpW_GtdtUwvEaAg7t\",\"code_challenge_method\": \"S256\",\"code_challenge\": \"KsNozrrrHSmQ28QLwrIeeo-cTuPw6hAGxUdbvjXatFM\",\"identifier_type\": \"email\",\"identifier_value\": \"info@getbeak.app\"}",
+	"body": "{\"client_id\": \"client_000000C2kdCzNlbL1BqR5FeMatItU\",\"grant_type\": \"authorization_code\",\"redirect_uri\": \"https:\/\/magic.getbeak.app\/callback\",\"code\": \"authzcode_000000C2zJYo5wL0obpYysVYAuUfw.1268bd8c54d66ea23666491f3091aa9cefe39b6e42dc0a55d80bc4768a4ea24d\",\"code_verifier\": \"tulum2020-lol\"}",
 	"headers": {
 		"accept": "application/json",
 		"content-length": "0",
@@ -23,13 +23,13 @@
 		"domainPrefix": "d98dmsdlov",
 		"http": {
 			"method": "POST",
-			"path": "/1/2020-12-14/send_magic_link",
+			"path": "/1/2020-12-14/authenticate_user",
 			"protocol": "HTTP/1.2",
 			"sourceIp": "205.255.255.176",
 			"userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
 		},
 		"requestId": "JKJaXmPLvHcESHA=",
-		"routeKey": "ANY /1/2020-12-14/send_magic_link",
+		"routeKey": "ANY /1/2020-12-14/authenticate_user",
 		"stage": "default",
 		"time": "14/Dec/2020:11:00:00 +0000",
 		"timeEpoch": 1583817383220

@@ -1,11 +1,18 @@
 import { SESClient } from '@aws-sdk/client-ses';
-import RedisClient from 'ioredis';
+import Stripe from 'stripe';
 
+import DbClient from '../db';
 import { App, Config } from '../types';
 
 export default function createApp(config: Config): App {
 	return {
-		redisClient: new RedisClient(config.redisUri),
+		config,
+
+		dbClient: new DbClient(),
 		sesClient: new SESClient('eu-west-2'),
+		stripeClient: new Stripe(config.stpSecretKey, {
+			typescript: true,
+			apiVersion: '2020-08-27',
+		}),
 	};
 }

@@ -1,26 +1,10 @@
-import crypto from 'crypto';
 import { SendEmailCommand } from '@aws-sdk/client-ses';
+import ksuid from '@cuvva/ksuid';
+import crypto from 'crypto';
 
+import { Context, SendMagicLinkRequest } from '../types';
 import Squawk from '../utils/squawk';
 import { getClient } from './clients';
-import { Context, SendMagicLinkRequest } from '../types';
-import ksuid from '@cuvva/ksuid';
-
-export interface AuthorizationCode {
-	id: string;
-	key: string;
-	createdAt: string;
-	expiresAt: string;
-	usedAt: string | null;
-	revokedAt: string | null;
-	clientId: string;
-	state: string;
-	codeChallengeMethod: 'S256';
-	codeChallenge: string;
-	redirectUri: string;
-	identifierType: 'email';
-	identifierValue: string;
-}
 
 const expiry = 1200; // 20 minutes
 
@@ -32,7 +16,8 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 
 	const authCode = ksuid.generate('authzcode').toString();
 	const authKey = crypto.randomBytes(32).toString('hex');
-	const record: AuthorizationCode = {
+
+	await ctx.app.dbClient.authorizations.create({
 		id: authCode,
 		createdAt: (new Date()).toISOString(),
 		expiresAt: (new Date(Date.now() + (expiry * 1000))).toISOString(),
@@ -46,9 +31,7 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 		redirectUri: request.redirectUri,
 		identifierType: 'email',
 		identifierValue: request.identifierValue,
-	};
-
-	await ctx.app.redisClient.set(authCode, JSON.stringify(record), 'EX', expiry);
+	});
 
 	const code = `${authCode}.${authKey}`;
 	const emailUrl = `${client.redirectUri}?code=${code}&state=${encodeURIComponent(request.state)}`;
