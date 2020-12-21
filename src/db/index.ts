@@ -13,12 +13,12 @@ export default class DbClient {
 	refreshTokens: RefreshTokens;
 	users: Users;
 
-	constructor() {
+	constructor(env: string) {
 		this.client = new DynamoDBClient({ region: 'eu-west-2' });
 
-		this.authorizations = new Authorizations(this.client);
-		this.accessTokens = new AccessTokens(this.client);
-		this.refreshTokens = new RefreshTokens(this.client);
-		this.users = new Users(this.client);
+		this.authorizations = new Authorizations(this.client, env);
+		this.accessTokens = new AccessTokens(this.client, env);
+		this.refreshTokens = new RefreshTokens(this.client, env);
+		this.users = new Users(this.client, env);
 	}
 }

@@ -10,23 +10,39 @@ import router from './rpc/router';
 import { Config } from './types';
 import Squawk from './utils/squawk';
 
+import jwt from 'jsonwebtoken';
+
 // These are local testing keys, nice try ;)
 
-const jwtPrivateKey = `-----BEGIN EC PRIVATE KEY-----
-MHQCAQEEICM/0xcIZaf0DWn6ghQbsQgiPa40IcbYdPlADA+68CESoAcGBSuBBAAK
-oUQDQgAETdHguV99jsYC9oQJEdwS7Ow9Yi3kj/riYvdL8YZqEHyjBHBbNVgpNzd+
-a04o4x6BCXYzK8+r4fIzxUwT1XBGAA==
+const jwtPrivateKeyTest = `-----BEGIN EC PRIVATE KEY-----
+MIHcAgEBBEIB5gqMiYlWqZI/yJec3oCljbAn6SH4RyRIhjG6eJEHpFGFuRbiYyk8
+XFz+FWdqDUQnQqhluSU3b0cCEqOwhoZ9M9qgBwYFK4EEACOhgYkDgYYABAAm3osJ
+/vGKbnoRqeXa3eRgASoCCJ6JHv3O0wxyGM161X5W+G2zHaSn9QmnrJ0Ba39T+Hsu
+e7+J7BEYhkGMlWg3EAGpMHYf7GLuCUT25TN+iZiIlXNtDK8vwLCi6ozbGl+jCkh2
+shark0UnFEsQ45alBErdtdb88iSyzZkQrrlfwiM1Sg==
 -----END EC PRIVATE KEY-----`;
 
-const jwtPublicKey = `-----BEGIN PUBLIC KEY-----
-MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAETdHguV99jsYC9oQJEdwS7Ow9Yi3kj/ri
-YvdL8YZqEHyjBHBbNVgpNzd+a04o4x6BCXYzK8+r4fIzxUwT1XBGAA==
+const jwtPublicKeyTest = `-----BEGIN PUBLIC KEY-----
+MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQAJt6LCf7xim56Eanl2t3kYAEqAgie
+iR79ztMMchjNetV+Vvhtsx2kp/UJp6ydAWt/U/h7Lnu/iewRGIZBjJVoNxABqTB2
+H+xi7glE9uUzfomYiJVzbQyvL8CwouqM2xpfowpIdrIWq5NFJxRLEOOWpQRK3bXW
+/PIkss2ZEK65X8IjNUo=
 -----END PUBLIC KEY-----`;
 
 function getConfig(): Config {
+	const [jwtPrivateKey, jwtPublicKey] = (function readJwtEnv() {
+		if (!process.env.JWT_KEYS)
+			return [jwtPrivateKeyTest, jwtPublicKeyTest];
+
+		const { privateKey, publicKey } = JSON.parse(process.env.JWT_KEYS);
+
+		return [privateKey, publicKey];
+	}());
+
 	return {
-		jwtPrivateKey: process.env.JWT_PRIVATE_KEY ?? jwtPrivateKey,
-		jwtPublicKey: process.env.JWT_PUBLIC_KEY ?? jwtPublicKey,
+		env: process.env.APP_ENV ?? 'test',
+		jwtPrivateKey,
+		jwtPublicKey,
 		stpSecretKey: process.env.STRIPE_SECRET_KEY ?? '',
 	};
 }
@@ -76,5 +92,5 @@ function createResponse(statusCode: number, body?: string) {
 export const run = async () => {
 	// logger.info(await handler(events.sendMagicLink as APIGatewayProxyEventV2));
 	// logger.info(await handler(events.authenticateUser as APIGatewayProxyEventV2));
-	logger.info(await handler(events.getSubscriptionStatus as APIGatewayProxyEventV2));
+	// logger.info(await handler(events.getSubscriptionStatus as APIGatewayProxyEventV2));
 };

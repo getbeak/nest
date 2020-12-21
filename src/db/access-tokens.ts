@@ -1,7 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
-import Table from './table';
 import { Grant } from '../types';
+import Table from './table';
 
 export interface AccessToken {
 	id: string;
@@ -16,7 +16,7 @@ export interface AccessToken {
 }
 
 export default class AccessTokens extends Table<AccessToken> {
-	constructor(client: DynamoDBClient) {
-		super(client, 'beak-nest-access-tokens');
+	constructor(client: DynamoDBClient, env: string) {
+		super(client, 'beak-nest-access-tokens', env);
 	}
 }

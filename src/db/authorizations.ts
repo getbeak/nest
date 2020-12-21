@@ -19,8 +19,8 @@ export interface AuthorizationCode {
 }
 
 export default class Authorizations extends Table<AuthorizationCode> {
-	constructor(client: DynamoDBClient) {
-		super(client, 'beak-nest-authorizations');
+	constructor(client: DynamoDBClient, env: string) {
+		super(client, 'beak-nest-authorizations', env);
 	}
 
 	async setAsUsed(id: string) {

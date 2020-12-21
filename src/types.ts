@@ -5,6 +5,7 @@ import { Logger } from 'tslog';
 import DbClient from './db';
 
 export interface Config {
+	env: string;
 	jwtPublicKey: string;
 	jwtPrivateKey: string;
 	stpSecretKey: string;

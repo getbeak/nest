@@ -12,9 +12,7 @@
     "compile": "tsc -b tsconfig.json",
     "start": "tsc -b tsconfig.json -w",
     "demo": "node -e \"require('./dist').run()\"",
-    "package": "aws lambda update-function-code --function-name beak-nest --zip-file fileb://./bundle.zip",
-    "prepackage": "zip -r bundle.zip .",
-    "deploy": "./node_modules/.bin/lambda start ./nest.test.lambda"
+    "package": "yarn install --production --ignore-optional && zip -r bundle.zip ."
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.66",

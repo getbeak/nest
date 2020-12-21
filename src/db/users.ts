@@ -8,7 +8,7 @@ export interface User {
 }
 
 export default class Users extends Table<User> {
-	constructor(client: DynamoDBClient) {
-		super(client, 'beak-nest-users');
+	constructor(client: DynamoDBClient, env: string) {
+		super(client, 'beak-nest-users', env);
 	}
 }

@@ -10,7 +10,7 @@ import authenticateUser, { authenticateUserSchema } from './authenticate-user';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
 
-const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/gm;
+const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/;
 
 const v20201214: VersionSet = {
 	send_magic_link: {
@@ -77,7 +77,7 @@ function parsePath(path: string) {
 	const matches = urlRegex.exec(path);
 
 	if (!matches)
-		throw new Squawk('malformed_url');
+		throw new Squawk('malformed_url', { path });
 
 	const [, baseVersion, dateVersion, endpoint] = matches;
 

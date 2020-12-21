@@ -11,9 +11,9 @@ export default abstract class Table<T extends Record<string, any>> {
 	protected client: DynamoDBClient;
 	tableName: string;
 
-	constructor(client: DynamoDBClient, tableName: string) {
+	constructor(client: DynamoDBClient, tableName: string, env: string) {
 		this.client = client;
-		this.tableName = tableName;
+		this.tableName = `${tableName}${env === 'prod' ? '' : `-${env}`}`;
 	}
 
 	async getById(id: string): Promise<T> {
