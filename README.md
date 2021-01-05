@@ -91,3 +91,14 @@ Effectively a heartbeat request to check the status of the user's subscription e
 	"subscription": "beak_alpha"
 }
 ```
+
+## Note
+
+To deploy run the following:
+
+```
+yarn
+yarn build
+rm -rf ./node_modules
+yarn package
+```
