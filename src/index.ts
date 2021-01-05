@@ -10,8 +10,6 @@ import router from './rpc/router';
 import { Config } from './types';
 import Squawk from './utils/squawk';
 
-import jwt from 'jsonwebtoken';
-
 // These are local testing keys, nice try ;)
 
 const jwtPrivateKeyTest = `-----BEGIN EC PRIVATE KEY-----
@@ -57,23 +55,25 @@ const logger = new Logger();
 const app = createApp(getConfig());
 
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+	const isOrigin = Boolean(event.headers['origin']);
+
 	try {
 		const response = await router(logger, app, event);
 
 		if (!response)
-			return createResponse(204);
+			return createResponse(204, isOrigin);
 
-		return createResponse(200, JSON.stringify(snakeCaseKeys(response)));
+		return createResponse(200, isOrigin, JSON.stringify(snakeCaseKeys(response)));
 	} catch (error) {
 		logger.error(error);
 
 		const squawk = Squawk.isSquawk(error) ? error : Squawk.coerce(error);
 
-		return createResponse(200, JSON.stringify(snakeCaseKeys(squawk)));
+		return createResponse(200, isOrigin, JSON.stringify(snakeCaseKeys(squawk)));
 	}
 };
 
-function createResponse(statusCode: number, body?: string) {
+function createResponse(statusCode: number, isOrigin: boolean, body?: string) {
 	const response: APIGatewayProxyResultV2 = {
 		statusCode,
 		body: void 0,
@@ -82,6 +82,14 @@ function createResponse(statusCode: number, body?: string) {
 			'beak-time': (new Date()).toISOString(),
 		},
 	};
+
+	if (isOrigin) {
+		response.headers!['access-control-allow-origin'] = 'https://*';
+		response.headers!['access-control-allow-methods'] = 'HEAD, OPTIONS, POST';
+		response.headers!['access-control-allow-headers'] = 'content-type';
+		response.headers!['access-control-expose-headers'] = 'beak-date';
+		response.headers!['access-control-max-age'] = '86400';
+	}
 
 	if (body)
 		response.body = body;
