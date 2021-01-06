@@ -88,7 +88,7 @@ function createResponse(statusCode: number, isOrigin: boolean, body?: string) {
 	};
 
 	if (isOrigin) {
-		response.headers!['access-control-allow-origin'] = 'https://*';
+		response.headers!['access-control-allow-origin'] = '*';
 		response.headers!['access-control-allow-methods'] = 'HEAD, OPTIONS, POST';
 		response.headers!['access-control-allow-headers'] = 'content-type';
 		response.headers!['access-control-expose-headers'] = 'beak-date';
