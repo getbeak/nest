@@ -1,4 +1,8 @@
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
+import {
+	APIGatewayProxyEventHeaders,
+	APIGatewayProxyEventV2,
+	APIGatewayProxyResultV2,
+} from 'aws-lambda';
 import snakeCaseKeys from 'snakecase-keys';
 import { Logger } from 'tslog';
 
@@ -55,7 +59,7 @@ const logger = new Logger();
 const app = createApp(getConfig());
 
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
-	const isOrigin = Boolean(event.headers['origin']);
+	const isOrigin = Boolean(getHeader(event.headers, 'origin'));
 
 	try {
 		const response = await router(logger, app, event);
@@ -95,6 +99,15 @@ function createResponse(statusCode: number, isOrigin: boolean, body?: string) {
 		response.body = body;
 
 	return response;
+}
+
+function getHeader(headers: APIGatewayProxyEventHeaders, key: string) {
+	const header = Object.keys(headers).find(k => k.toLowerCase() === key.toLowerCase());
+
+	if (!header)
+		return null;
+	
+	return headers[header];
 }
 
 export const run = async () => {
