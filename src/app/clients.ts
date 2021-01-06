@@ -11,7 +11,7 @@ const clients: Client[] = [{
 	id: 'client_000000C2kdCzNlbL1BqR5FeMatItU',
 	name: 'Beak app',
 	enabled: true,
-	redirectUri: ['https://magic.getbeak.app'],
+	redirectUri: ['https://magic.getbeak.app/'],
 }];
 
 export function getClient(clientId: string) {

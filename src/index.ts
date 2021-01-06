@@ -91,7 +91,7 @@ function createResponse(statusCode: number, isOrigin: boolean, body?: string) {
 		response.headers!['access-control-allow-origin'] = '*';
 		response.headers!['access-control-allow-methods'] = 'HEAD, OPTIONS, POST';
 		response.headers!['access-control-allow-headers'] = 'content-type';
-		response.headers!['access-control-expose-headers'] = 'beak-date';
+		response.headers!['access-control-expose-headers'] = 'beak-time';
 		response.headers!['access-control-max-age'] = '86400';
 	}
 
