@@ -73,7 +73,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 
 		const squawk = Squawk.isSquawk(error) ? error : Squawk.coerce(error);
 
-		return createResponse(200, isOrigin, JSON.stringify(snakeCaseKeys(squawk)));
+		return createResponse(500, isOrigin, JSON.stringify(snakeCaseKeys(squawk)));
 	}
 };
 
