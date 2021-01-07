@@ -40,7 +40,7 @@ Sends a magic link enabling a user to authenticate!
 
 Authenticates a user upon receiving the magic link from above.
 
-#### Request
+#### Request (`authorization_code`)
 
 ```json
 {
@@ -48,7 +48,7 @@ Authenticates a user upon receiving the magic link from above.
 	"grant_type": "authorization_code",
 	"redirect_uri": "https://magic.getbeak.app/callback",
 	"code": "authzcode_000000BRxPaWGu0xDiHFOktPnBtKA.e2d09621646f6c104d7d6def9d1243e5fc22b0df765f8351495906c0ff2d0677",
-	"code_verifier": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk",
+	"code_verifier": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
 }
 ```
 
@@ -57,6 +57,20 @@ Authenticates a user upon receiving the magic link from above.
 - `redirect_uri`: The redirect URI whitelisted against the client.
 - `code`: The authorization code that we got from the magic link.
 - `code_verifier`: The plaintext string that was hashed in the previous step and submitted as `code_challenge`.
+
+#### Request (`refresh_token`)
+
+```json
+{
+	"client_id": "client_000000C2kdCzNlbL1BqR5FeMatItU",
+	"grant_type": "refresh_token",
+	"refresh_token": "01.reftok_000000C2kfdVv573A4YW7noYi2Ts8.7af10c1eb4d0c6aec372e2ea7682348b9c1d975ee6891d247117378a9e5ab4ad"
+}
+```
+
+- `client_id`: The ID of the client requesting the magic link.
+- `grant_type`: Must be `authorization_code` for authenticating.
+- `refresh_token`: The token used to refresh the auth chain.
 
 #### Response
 
