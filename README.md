@@ -1,6 +1,6 @@
 # Nest
 
-Serverless API powering releases, user management, auth, etc. Have a poke around!
+Serverless API powering releases, user management, auth, etc. Have a poke around! :)
 
 Base URL: `https://nest.getbeak.app/1/
 
