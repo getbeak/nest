@@ -4,10 +4,7 @@
 
 	"required": [
 		"client_id",
-		"grant_type",
-		"redirect_uri",
-		"code",
-		"code_verifier"
+		"grant_type"
 	],
 
 	"properties": {
@@ -32,6 +29,11 @@
 		},
 
 		"code_verifier": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"refresh_token": {
 			"type": "string",
 			"minLength": 1
 		}

@@ -1,10 +1,19 @@
 import crypto from 'crypto';
 
-import { AuthenticateUserRequest, Context, Grant } from '../types';
+import { AuthenticateUserAuthorizationCode, Context, Grant } from '../types';
 import Squawk from '../utils/squawk';
 import { getOrCreateUser } from './stripe-users';
 
-export async function validateAuthorizationCode(ctx: Context, request: AuthenticateUserRequest) {
+export async function validateAuthorizationCode(ctx: Context, request: AuthenticateUserAuthorizationCode) {
+	if (!request.code)
+		throw new Squawk('code_missing');
+
+	if (!request.codeVerifier)
+		throw new Squawk('code_verifier_missing');
+
+	if (!request.redirectUri)
+		throw new Squawk('redirect_uri_missing');
+
 	const [authCode, authKey, ...spare] = request.code.split('.');
 
 	if (!authCode || !authKey || spare.length > 0)
@@ -35,11 +44,9 @@ export async function validateAuthorizationCode(ctx: Context, request: Authentic
 		throw new Squawk('incorrect_code_verifier');
 }
 
-export async function handleAuthorizationCode(ctx: Context, request: AuthenticateUserRequest) {
+export async function handleAuthorizationCode(ctx: Context, request: AuthenticateUserAuthorizationCode) {
 	const [authCode] = request.code.split('.');
 	const record = await ctx.app.dbClient.authorizations.getById(authCode);
-
-	record.usedAt = (new Date()).toISOString();
 
 	const [userId] = await Promise.all([
 		getOrCreateUser(ctx, record.identifierValue),

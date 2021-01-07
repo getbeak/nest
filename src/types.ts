@@ -67,13 +67,21 @@ export interface SendMagicLinkRequest {
 	identifierValue: string;
 }
 
-export interface AuthenticateUserRequest {
+export interface AuthenticateUserAuthorizationCode {
 	clientId: string;
-	grantType: GrantType;
-	redirectUri?: string;
+	grantType: 'authorization_code';
+	redirectUri: string;
 	code: string;
-	codeVerifier?: string;
+	codeVerifier: string;
 }
+
+export interface AuthenticateUserRefreshToken {
+	clientId: string;
+	grantType: 'refresh_token';
+	refreshToken: string;
+}
+
+export type AuthenticateUserRequest = AuthenticateUserAuthorizationCode | AuthenticateUserRefreshToken;
 
 export interface AuthenticateUserResponse {
 	accessToken: string;

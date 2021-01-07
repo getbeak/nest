@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { AuthenticateUserRequest, AuthenticateUserResponse, Context, Grant } from '../types';
 import Squawk from '../utils/squawk';
 import { handleAuthorizationCode, validateAuthorizationCode } from './auth-authorization-code';
+import { handleRefreshToken, validateRefreshToken } from './auth-refresh-token';
 import { getClient } from './clients';
 
 const accessTokenExpiry = 3600; // 60 minutes
@@ -19,8 +20,8 @@ export default async function authenticateUser(
 	const client = getClient(request.clientId);
 
 	const { grant, rootGrant, userId } = await handleGrant(ctx, request);
-
 	const authentication = await createAuthentication(ctx, client.id, userId, grant, rootGrant, [ctx.request.clientIp]);
+
 	const { accessToken, expiresAt, expiresIn, refreshToken } = authentication;
 
 	return {
@@ -35,22 +36,24 @@ export default async function authenticateUser(
 }
 
 async function validateGrant(ctx: Context, request: AuthenticateUserRequest) {
+	const grantType = request.grantType;
+
 	switch (request.grantType) {
 		case 'authorization_code': return await validateAuthorizationCode(ctx, request);
-		// case 'access_token': return;
-		// case 'refresh_token': return;
+		case 'refresh_token': return await validateRefreshToken(ctx, request);
 
-		default: throw new Squawk('unsupported_grant_type', { grantType: request.grantType });
+		default: throw new Squawk('unsupported_grant_type', { grantType });
 	}
 }
 
 async function handleGrant(ctx: Context, request: AuthenticateUserRequest) {
+	const grantType = request.grantType;
+
 	switch (request.grantType) {
 		case 'authorization_code': return await handleAuthorizationCode(ctx, request);
-		// case 'access_token': return;
-		// case 'refresh_token': return;
+		case 'refresh_token': return await handleRefreshToken(ctx, request);
 
-		default: throw new Squawk('unsupported_grant_type', { grantType: request.grantType });
+		default: throw new Squawk('unsupported_grant_type', { grantType });
 	}
 }
 
