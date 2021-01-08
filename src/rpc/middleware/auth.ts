@@ -28,7 +28,7 @@ export default async function handleAuth(app: App, event: APIGatewayProxyEventV2
 		decoded = jwt.verify(token, app.config.jwtPublicKey, { algorithms: ['ES512'] }) as JWT;
 	} catch (error) {
 		if (error.message === 'jwt expired')
-			throw new Squawk('token_expired');
+			throw new Squawk('unauthorized', null, [new Squawk('token_expired')]);
 		
 		throw error;
 	}
@@ -42,7 +42,7 @@ export default async function handleAuth(app: App, event: APIGatewayProxyEventV2
 		throw new Squawk('token_revoked');
 
 	if (ascTkn.expiresAt < (new Date()).toISOString())
-		throw new Squawk('token_expired');
+		throw new Squawk('unauthorized', null, [new Squawk('token_expired')]);
 
 	return decoded.sub;
 }
