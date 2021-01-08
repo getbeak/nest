@@ -1,7 +1,7 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Db, FilterQuery } from 'mongodb';
 
 import { Grant } from '../types';
-import Table from './table';
+import Collection from './nest-collection';
 
 export interface AccessToken {
 	id: string;
@@ -15,8 +15,34 @@ export interface AccessToken {
 	cidrBlocks: string[];
 }
 
-export default class AccessTokens extends Table<AccessToken> {
-	constructor(client: DynamoDBClient, env: string) {
-		super(client, 'beak-nest-access-tokens', env);
+export default class AccessTokens extends Collection<AccessToken> {
+	constructor(db: Db) {
+		super(db, 'access-tokens');
+	}
+
+	async setupIndexes() {
+		
+	}
+
+	async findAllActive(userId: string, clientId: string) {
+		const filter: FilterQuery<AccessToken> = {
+			revokedAt: null,
+			expiresAt: { $gt: new Date().toISOString() },
+			userId,
+			clientId,
+		};
+
+		const items = await this.collection.find(filter).toArray();
+
+		return items.map(this.convertFromMongoDocument);
+	}
+
+	async setManyAsRevoked(ids: string[]) {
+		await this.collection.updateMany({
+			_id: { $in: ids },
+			revokedAt: null,
+		} as FilterQuery<AccessToken>, {
+			revokedAt: new Date().toISOString(),
+		});
 	}
 }

@@ -1,14 +1,18 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Db } from 'mongodb';
 
-import Table from './table';
+import Collection from './nest-collection';
 
 export interface User {
 	id: string;
 	stpUserId: string;
 }
 
-export default class Users extends Table<User> {
-	constructor(client: DynamoDBClient, env: string) {
-		super(client, 'beak-nest-users', env);
+export default class Users extends Collection<User> {
+	constructor(db: Db) {
+		super(db, 'users');
+	}
+
+	async setupIndexes() {
+		
 	}
 }

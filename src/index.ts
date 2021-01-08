@@ -45,6 +45,7 @@ function getConfig(): Config {
 		env: process.env.APP_ENV ?? 'test',
 		jwtPrivateKey,
 		jwtPublicKey,
+		mongoUri: 'mongodb://localhost/nest',
 		stpSecretKey: process.env.STRIPE_SECRET_KEY ?? '',
 	};
 }

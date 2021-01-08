@@ -1,6 +1,6 @@
-import { DynamoDBClient, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+import { Db, FilterQuery } from 'mongodb';
 
-import Table from './table';
+import Collection from './nest-collection';
 
 export interface AuthorizationCode {
 	id: string;
@@ -18,22 +18,30 @@ export interface AuthorizationCode {
 	identifierValue: string;
 }
 
-export default class Authorizations extends Table<AuthorizationCode> {
-	constructor(client: DynamoDBClient, env: string) {
-		super(client, 'beak-nest-authorizations', env);
+export default class Authorizations extends Collection<AuthorizationCode> {
+	constructor(db: Db) {
+		super(db, 'authorizations');
+	}
+
+	async setupIndexes() {
+		
 	}
 
 	async setAsUsed(id: string) {
-		this.client.send(new UpdateItemCommand({
-			TableName: this.tableName,
-			Key: { id: { S: id } },
-			UpdateExpression: 'set #newUsedAt = :x',
-			ExpressionAttributeNames: {
-				'#newUsedAt': 'usedAt',
-			},
-			ExpressionAttributeValues: {
-				':x': { S: (new Date()).toISOString() },
-			},
-		}));
+		await this.collection.updateOne({ _id: id } as FilterQuery<AuthorizationCode>, {
+			usedAt: new Date().toISOString(),
+		});
+	}
+
+	async setManyAsRevoked(type: 'email', value: string, clientId: string) {
+		await this.collection.updateMany({
+			clientId,
+			type,
+			value,
+			usedAt: null,
+			revokedAt: null,
+		} as FilterQuery<AuthorizationCode>, {
+			revokedAt: new Date().toISOString(),
+		});
 	}
 }

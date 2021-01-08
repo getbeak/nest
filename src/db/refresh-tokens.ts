@@ -1,29 +1,36 @@
-import { DynamoDBClient, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+import { Db, FilterQuery } from 'mongodb';
 
 import { AccessToken } from './access-tokens';
-import Table from './table';
+import Collection from './nest-collection';
 
 export interface RefreshToken extends AccessToken {
 	usedAt: string | null;
 	key: string;
 }
 
-export default class RefreshTokens extends Table<RefreshToken> {
-	constructor(client: DynamoDBClient, env: string) {
-		super(client, 'beak-nest-refresh-tokens', env);
+export default class RefreshTokens extends Collection<RefreshToken> {
+	constructor(db: Db) {
+		super(db, 'refresh-tokens');
+	}
+
+	async setupIndexes() {
+		
 	}
 
 	async setAsUsed(id: string) {
-		this.client.send(new UpdateItemCommand({
-			TableName: this.tableName,
-			Key: { id: { S: id } },
-			UpdateExpression: 'set #newUsedAt = :x',
-			ExpressionAttributeNames: {
-				'#newUsedAt': 'usedAt',
-			},
-			ExpressionAttributeValues: {
-				':x': { S: (new Date()).toISOString() },
-			},
-		}));
+		await this.collection.updateOne({ _id: id } as FilterQuery<RefreshToken>, {
+			usedAt: new Date().toISOString(),
+		});
+	}
+
+	async setManyAsRevoked(userId: string, clientId: string) {
+		await this.collection.updateMany({
+			userId,
+			clientId,
+			usedAt: null,
+			revokedAt: null,
+		} as FilterQuery<RefreshToken>, {
+			revokedAt: new Date().toISOString(),
+		});
 	}
 }

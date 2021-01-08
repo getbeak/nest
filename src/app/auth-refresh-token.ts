@@ -1,8 +1,6 @@
-import crypto from 'crypto';
-
 import { AuthenticateUserRefreshToken, Context, Grant } from '../types';
 import Squawk from '../utils/squawk';
-import { getOrCreateUser } from './stripe-users';
+import revokeTokens from './revoke-tokens';
 
 export async function validateRefreshToken(ctx: Context, request: AuthenticateUserRefreshToken) {
 	if (!request.refreshToken)
@@ -13,7 +11,7 @@ export async function validateRefreshToken(ctx: Context, request: AuthenticateUs
 	if (!version || !refTokId || refTokKey || spare.length > 0)
 		throw new Squawk('malformed_refresh_token');
 
-	const refTok = await ctx.app.dbClient.refreshTokens.getById(refTokId);
+	const refTok = await ctx.app.dbClient.refreshTokens.findById(refTokId);
 
 	if (refTok.key !== refTokKey)
 		throw new Squawk('token_not_found');
@@ -34,9 +32,10 @@ export async function validateRefreshToken(ctx: Context, request: AuthenticateUs
 
 export async function handleRefreshToken(ctx: Context, request: AuthenticateUserRefreshToken) {
 	const [, refTokId] = request.refreshToken.split('.');
-	const refTok = await ctx.app.dbClient.refreshTokens.getById(refTokId);
+	const refTok = await ctx.app.dbClient.refreshTokens.findById(refTokId);
 
 	await ctx.app.dbClient.refreshTokens.setAsUsed(refTokId);
+	await revokeTokens(ctx, refTok.userId, refTok.clientId, { authorizations: false });
 
 	const grant: Grant = {
 		type: 'refresh_token',

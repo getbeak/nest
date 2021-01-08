@@ -9,6 +9,7 @@ export interface Config {
 	jwtPublicKey: string;
 	jwtPrivateKey: string;
 	stpSecretKey: string;
+	mongoUri: string;
 }
 
 export interface App {

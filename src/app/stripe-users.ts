@@ -1,4 +1,5 @@
 import ksuid from '@cuvva/ksuid';
+import Squawk from 'utils/squawk';
 
 import { Context } from '../types';
 
@@ -18,10 +19,19 @@ export async function getOrCreateUser(ctx: Context, emailAddress: string) {
 		},
 	});
 
-	await ctx.app.dbClient.users.create({
+	await ctx.app.dbClient.users.createOne({
 		id: userId,
 		stpUserId: customer.id,
 	});
 
 	return userId;
+}
+
+export async function getCustomerEmail(ctx: Context, customerId: string) {
+	const customer = await ctx.app.stripeClient.customers.retrieve(customerId);
+
+	if (customer.deleted)
+		throw new Squawk('customer_deleted');
+
+	return customer.email;
 }
