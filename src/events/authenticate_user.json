@@ -4,7 +4,7 @@
 	"rawPath": "/1/2020-12-14/authenticate_user",
 	"rawQueryString": "",
 	"cookies": [],
-	"body": "{\"client_id\": \"client_000000C2kdCzNlbL1BqR5FeMatItU\",\"grant_type\": \"authorization_code\",\"redirect_uri\": \"https:\/\/magic.getbeak.app\/callback\",\"code\": \"authzcode_000000C2zZTxhLP49ZO59DUrolIuW.40bb1b1ecdcf258d6dea06ff13387402ec38125339f741859dae2b3a0168f5ba\",\"code_verifier\": \"tulum2020-lol\"}",
+	"body": "{\"client_id\": \"client_000000C2kdCzNlbL1BqR5FeMatItU\",\"grant_type\": \"authorization_code\",\"redirect_uri\": \"https:\/\/magic.getbeak.app\/\",\"code\": \"authzcode_000000C3kZsMTUcGOigNishlmImjA.075a4717eabc6485129e2e2111beea1764e4bc714410eabe16156427bd90f23f\",\"code_verifier\": \"tulum2020-lol\"}",
 	"headers": {
 		"accept": "application/json",
 		"content-length": "0",

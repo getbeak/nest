@@ -19,7 +19,7 @@ Sends a magic link enabling a user to authenticate!
 ```json
 {
 	"client_id": "client_000000C2kdCzNlbL1BqR5FeMatItU",
-	"redirect_uri": "https://magic.getbeak.app/callback",
+	"redirect_uri": "https://magic.getbeak.app/",
 	"state": "lx/rAzKFsThZ+pqne+uCQZ2OamjZtpW_GtdtUwvEaAg7t",
 	"code_challenge_method": "S256",
 	"code_challenge": "ec088e759677e0f799ccbe2b3a667c16037af08b0e3dff8732edbe1f42f6ef1c",
@@ -46,7 +46,7 @@ Authenticates a user upon receiving the magic link from above.
 {
 	"client_id": "client_000000C2kdCzNlbL1BqR5FeMatItU",
 	"grant_type": "authorization_code",
-	"redirect_uri": "https://magic.getbeak.app/callback",
+	"redirect_uri": "https://magic.getbeak.app/",
 	"code": "authzcode_000000BRxPaWGu0xDiHFOktPnBtKA.e2d09621646f6c104d7d6def9d1243e5fc22b0df765f8351495906c0ff2d0677",
 	"code_verifier": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
 }
