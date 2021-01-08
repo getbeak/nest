@@ -8,7 +8,7 @@ export default function createApp(config: Config): App {
 	return {
 		config,
 
-		dbClient: new DbClient(config.env),
+		dbClient: new DbClient(config.mongoUri),
 		sesClient: new SESClient('eu-west-2'),
 		stripeClient: new Stripe(config.stpSecretKey, {
 			typescript: true,
