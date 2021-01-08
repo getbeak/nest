@@ -15,7 +15,10 @@ export default class DbClient {
 	users!: Users;
 
 	constructor(mongoUri: string) {
-		this.client = new MongoClient(mongoUri, { useNewUrlParser: true });
+		this.client = new MongoClient(mongoUri, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+		});
 	}
 
 	async connect() {
