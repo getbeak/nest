@@ -1,7 +1,7 @@
 import ksuid from '@cuvva/ksuid';
-import Squawk from 'utils/squawk';
 
 import { Context } from '../types';
+import Squawk from '../utils/squawk';
 
 export async function getOrCreateUser(ctx: Context, emailAddress: string) {
 	const existingUser = await ctx.app.stripeClient.customers.list({
