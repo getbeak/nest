@@ -19,7 +19,7 @@ export default class RefreshTokens extends Collection<RefreshToken> {
 
 	async setAsUsed(id: string) {
 		await this.collection.updateOne({ _id: id } as FilterQuery<RefreshToken>, {
-			usedAt: new Date().toISOString(),
+			$set: { usedAt: new Date().toISOString() },
 		});
 	}
 
@@ -30,7 +30,7 @@ export default class RefreshTokens extends Collection<RefreshToken> {
 			usedAt: null,
 			revokedAt: null,
 		} as FilterQuery<RefreshToken>, {
-			revokedAt: new Date().toISOString(),
+			$set: { revokedAt: new Date().toISOString() },
 		});
 	}
 }

@@ -42,7 +42,9 @@ export default class AccessTokens extends Collection<AccessToken> {
 			_id: { $in: ids },
 			revokedAt: null,
 		} as FilterQuery<AccessToken>, {
-			revokedAt: new Date().toISOString(),
+			$set: {
+				revokedAt: new Date().toISOString(),
+			},
 		});
 	}
 }

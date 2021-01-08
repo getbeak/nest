@@ -29,7 +29,7 @@ export default class Authorizations extends Collection<AuthorizationCode> {
 
 	async setAsUsed(id: string) {
 		await this.collection.updateOne({ _id: id } as FilterQuery<AuthorizationCode>, {
-			usedAt: new Date().toISOString(),
+			$set: { usedAt: new Date().toISOString() },
 		});
 	}
 
@@ -41,7 +41,7 @@ export default class Authorizations extends Collection<AuthorizationCode> {
 			usedAt: null,
 			revokedAt: null,
 		} as FilterQuery<AuthorizationCode>, {
-			revokedAt: new Date().toISOString(),
+			$set: { revokedAt: new Date().toISOString() },
 		});
 	}
 }
