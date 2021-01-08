@@ -7,15 +7,19 @@ import Users from './users';
 
 export default class DbClient {
 	private client: MongoClient;
-	private db: Db;
+	private db!: Db;
 
-	authorizations: Authorizations;
-	accessTokens: AccessTokens;
-	refreshTokens: RefreshTokens;
-	users: Users;
+	authorizations!: Authorizations;
+	accessTokens!: AccessTokens;
+	refreshTokens!: RefreshTokens;
+	users!: Users;
 
 	constructor(mongoUri: string) {
-		this.client = new MongoClient(mongoUri);
+		this.client = new MongoClient(mongoUri, { useNewUrlParser: true });
+	}
+
+	async connect() {
+		await this.client.connect();
 		this.db = this.client.db('nest');
 
 		this.authorizations = new Authorizations(this.db);

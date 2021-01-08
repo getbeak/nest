@@ -60,6 +60,8 @@ const logger = new Logger();
 const app = createApp(getConfig());
 
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+	await app.dbClient.connect();
+
 	const isOrigin = Boolean(getHeader(event.headers, 'origin'));
 
 	try {
@@ -107,7 +109,7 @@ function getHeader(headers: APIGatewayProxyEventHeaders, key: string) {
 
 	if (!header)
 		return null;
-	
+
 	return headers[header];
 }
 
