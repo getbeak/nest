@@ -36,8 +36,8 @@ export default class Authorizations extends Collection<AuthorizationCode> {
 	async setManyAsRevoked(type: 'email', value: string, clientId: string) {
 		await this.collection.updateMany({
 			clientId,
-			type,
-			value,
+			identifierType: type,
+			identifierValue: value,
 			usedAt: null,
 			revokedAt: null,
 		} as FilterQuery<AuthorizationCode>, {
