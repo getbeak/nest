@@ -15,13 +15,19 @@ export interface AccessToken {
 	cidrBlocks: string[];
 }
 
+const ttl = 2678400; // 1 month
+
 export default class AccessTokens extends Collection<AccessToken> {
 	constructor(db: Db) {
 		super(db, 'access-tokens');
 	}
 
 	async setupIndexes() {
-		
+		await Promise.all([
+			this.collection.createIndex({ clientId: 1, userId: 1 }),
+			this.collection.createIndex({ expiresAt: 1 }, { sparse: true, expireAfterSeconds: ttl }),
+			this.collection.createIndex({ revokedAt: 1 }, { sparse: true, expireAfterSeconds: ttl }),
+		]);
 	}
 
 	async findAllActive(userId: string, clientId: string) {

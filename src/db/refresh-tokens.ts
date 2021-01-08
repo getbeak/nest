@@ -8,13 +8,19 @@ export interface RefreshToken extends AccessToken {
 	key: string;
 }
 
+const ttl = 2678400; // 1 month
+
 export default class RefreshTokens extends Collection<RefreshToken> {
 	constructor(db: Db) {
 		super(db, 'refresh-tokens');
 	}
 
 	async setupIndexes() {
-		
+		await Promise.all([
+			this.collection.createIndex({ clientId: 1, userId: 1 }),
+			this.collection.createIndex({ expiresAt: 1 }, { sparse: true, expireAfterSeconds: ttl }),
+			this.collection.createIndex({ revokedAt: 1, usedAt: 1 }, { sparse: true, expireAfterSeconds: ttl }),
+		]);
 	}
 
 	async setAsUsed(id: string) {

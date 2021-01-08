@@ -13,6 +13,6 @@ export default class Users extends Collection<User> {
 	}
 
 	async setupIndexes() {
-		
+		await this.collection.createIndex({ stpUserId: 1 });
 	}
 }

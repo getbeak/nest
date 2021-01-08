@@ -24,7 +24,10 @@ export default class Authorizations extends Collection<AuthorizationCode> {
 	}
 
 	async setupIndexes() {
-		
+		await Promise.all([
+			this.collection.createIndex({ expiresAt: 1, clientId: 1, identifierValue: 1 }),
+			this.collection.createIndex({ revokedAt: 1, usedAt: 1 }),
+		]);
 	}
 
 	async setAsUsed(id: string) {
