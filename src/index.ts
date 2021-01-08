@@ -49,7 +49,7 @@ function getConfig(): Config {
 	}());
 
 	return {
-		env: process.env.APP_ENV ?? 'test',
+		env,
 		jwtPrivateKey,
 		jwtPublicKey,
 		mongoUri: process.env.MONGO_URI ?? 'mongodb+srv://localhost/nest',
