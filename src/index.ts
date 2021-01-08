@@ -32,11 +32,18 @@ H+xi7glE9uUzfomYiJVzbQyvL8CwouqM2xpfowpIdrIWq5NFJxRLEOOWpQRK3bXW
 -----END PUBLIC KEY-----`;
 
 function getConfig(): Config {
+	const env = process.env.APP_ENV ?? 'test';
+
 	const [jwtPrivateKey, jwtPublicKey] = (function readJwtEnv() {
-		if (!process.env.JWT_KEYS)
+		const jwtKeys = process.env.JWT_KEYS;
+
+		if (!jwtKeys && env !== 'prod')
 			return [jwtPrivateKeyTest, jwtPublicKeyTest];
 
-		const { privateKey, publicKey } = JSON.parse(process.env.JWT_KEYS);
+		if (!jwtKeys)
+			throw new Squawk('jwt_keys_not_set');
+
+		const { privateKey, publicKey } = JSON.parse(jwtKeys);
 
 		return [privateKey, publicKey];
 	}());
@@ -45,7 +52,7 @@ function getConfig(): Config {
 		env: process.env.APP_ENV ?? 'test',
 		jwtPrivateKey,
 		jwtPublicKey,
-		mongoUri: 'mongodb://localhost/nest',
+		mongoUri: process.env.MONGO_URI ?? 'mongodb+srv://localhost/nest',
 		stpSecretKey: process.env.STRIPE_SECRET_KEY ?? '',
 	};
 }
