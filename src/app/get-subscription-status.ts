@@ -1,9 +1,8 @@
+import { Context, GetSubscriptionStatusRequest } from '../types';
 import Squawk from '../utils/squawk';
 
-import { Context, GetSubscriptionStatusRequest } from '../types';
-
 export default async function getSubscriptionStatus(ctx: Context, request: GetSubscriptionStatusRequest) {
-	const user = await ctx.app.dbClient.users.getById(request.userId);
+	const user = await ctx.app.dbClient.users.findById(request.userId);
 	const customer = await ctx.app.stripeClient.customers.retrieve(user.stpUserId);
 
 	if (customer.deleted)

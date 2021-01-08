@@ -66,7 +66,7 @@ async function createAuthentication(
 	cidrBlocks: string[],
 ) {
 	const [accessTok, refreshTok] = await Promise.all([
-		ctx.app.dbClient.accessTokens.create({
+		ctx.app.dbClient.accessTokens.createOne({
 			id: ksuid.generate('acstok').toString(),
 			createdAt: (new Date()).toISOString(),
 			expiresAt: (new Date(Date.now() + (accessTokenExpiry * 1000))).toISOString(),
@@ -77,7 +77,7 @@ async function createAuthentication(
 			grant,
 			cidrBlocks,
 		}),
-		ctx.app.dbClient.refreshTokens.create({
+		ctx.app.dbClient.refreshTokens.createOne({
 			id: ksuid.generate('reftok').toString(),
 			createdAt: (new Date()).toISOString(),
 			expiresAt: (new Date(Date.now() + (refreshTokenExpiry * 1000))).toISOString(),

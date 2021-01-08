@@ -17,7 +17,7 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 	const authCode = ksuid.generate('authzcode').toString();
 	const authKey = crypto.randomBytes(32).toString('hex');
 
-	await ctx.app.dbClient.authorizations.create({
+	await ctx.app.dbClient.authorizations.createOne({
 		id: authCode,
 		createdAt: (new Date()).toISOString(),
 		expiresAt: (new Date(Date.now() + (expiry * 1000))).toISOString(),
