@@ -52,7 +52,7 @@ function getConfig(): Config {
 		env,
 		jwtPrivateKey,
 		jwtPublicKey,
-		mongoUri: process.env.MONGO_URI ?? 'mongodb+srv://localhost/nest',
+		mongoUri: process.env.MONGO_URI ?? 'mongodb+srv://localhost/local-nest-beak',
 		stpSecretKey: process.env.STRIPE_SECRET_KEY ?? '',
 	};
 }
