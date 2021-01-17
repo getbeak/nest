@@ -9,7 +9,7 @@ export async function getOrCreateUser(ctx: Context, emailAddress: string) {
 	});
 
 	if (existingUser.data.length === 1)
-		return existingUser.data[0].metadata['user_id'];
+		return { userId: existingUser.data[0].metadata['user_id'], stpUserId: existingUser.data[0].id };
 
 	const userId = ksuid.generate('user').toString();
 	const customer = await ctx.app.stripeClient.customers.create({
@@ -24,7 +24,7 @@ export async function getOrCreateUser(ctx: Context, emailAddress: string) {
 		stpUserId: customer.id,
 	});
 
-	return userId;
+	return { userId, stpUserId: customer.id };
 }
 
 export async function getCustomerEmail(ctx: Context, customerId: string) {

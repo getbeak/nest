@@ -49,7 +49,7 @@ export async function handleAuthorizationCode(ctx: Context, request: Authenticat
 	const [authCode] = request.code.split('.');
 	const record = await ctx.app.dbClient.authorizations.findById(authCode);
 
-	const [userId] = await Promise.all([
+	const [{ userId }] = await Promise.all([
 		getOrCreateUser(ctx, record.identifierValue),
 		ctx.app.dbClient.authorizations.setAsUsed(authCode),
 	]);
