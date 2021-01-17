@@ -16,12 +16,21 @@ export default async function handleAuth(app: App, event: APIGatewayProxyEventV2
 	const header = Object.values(event.headers)[headerIndex];
 	const [type, token, ...spare] = header.split(' ');
 
-	if (type !== 'bearer')
-		throw new Squawk('invalid_token');
-
-	if (!type || !token || spare.length > 0)
+	if (!token || spare.length > 0)
 		throw new Squawk('malformed_token');
 
+	switch (type) {
+		case 'bearer':
+			return await handleBearer(app, token);
+		case 'internal':
+			return handleInternal(app, token);
+
+		default:
+			throw new Squawk('invalid_token');
+	}
+}
+
+async function handleBearer(app: App, token: string) {
 	let decoded: JWT;
 
 	try {
@@ -44,5 +53,15 @@ export default async function handleAuth(app: App, event: APIGatewayProxyEventV2
 	if (ascTkn.expiresAt < (new Date()).toISOString())
 		throw new Squawk('unauthorized', null, [new Squawk('token_expired')]);
 
-	return decoded.sub;
+	return {
+		type: 'user',
+		userId: decoded.sub,
+	};
+}
+
+function handleInternal(app: App, token: string) {
+	if (token !== app.config.internalKey)
+		throw new Squawk('access_denied');
+
+	return { type: 'internal' };
 }

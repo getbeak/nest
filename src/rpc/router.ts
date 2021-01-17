@@ -4,10 +4,10 @@ import { validate } from 'jsonschema';
 import { Logger } from 'tslog';
 
 import { App, Context, VersionSet, VersionSets } from '../types';
-import handleAuth from './middleware/auth';
 import Squawk from '../utils/squawk';
 import authenticateUser, { authenticateUserSchema } from './authenticate-user';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
+import handleAuth from './middleware/auth';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
 
 const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/;

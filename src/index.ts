@@ -33,6 +33,7 @@ H+xi7glE9uUzfomYiJVzbQyvL8CwouqM2xpfowpIdrIWq5NFJxRLEOOWpQRK3bXW
 
 function getConfig(): Config {
 	const env = process.env.APP_ENV ?? 'test';
+	const internalKey = process.env.INTERNAL_KEY ?? 'test';
 
 	const [jwtPrivateKey, jwtPublicKey] = (function readJwtEnv() {
 		const jwtKeys = process.env.JWT_KEYS;
@@ -48,10 +49,14 @@ function getConfig(): Config {
 		return [privateKey, publicKey];
 	}());
 
+	if (internalKey === 'test' && env === 'prod')
+		throw new Squawk('internal_key_not_set');
+
 	return {
 		env,
 		jwtPrivateKey,
 		jwtPublicKey,
+		internalKey,
 		mongoUri: process.env.MONGO_URI ?? 'mongodb+srv://localhost/local-nest-beak',
 		stpSecretKey: process.env.STRIPE_SECRET_KEY ?? '',
 	};

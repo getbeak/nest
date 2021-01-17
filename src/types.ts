@@ -10,6 +10,7 @@ export interface Config {
 	jwtPrivateKey: string;
 	stpSecretKey: string;
 	mongoUri: string;
+	internalKey: string;
 }
 
 export interface App {
@@ -22,13 +23,22 @@ export interface App {
 
 export interface Context {
 	app: App;
-	auth: null | string;
+	auth: null | AuthUser | AuthInternal;
 	logger: Logger;
 	request: {
 		clientIp: string;
 		userAgent: string;
 		awsRequestId: string;
 	};
+}
+
+export interface AuthUser {
+	type: 'user';
+	userId: string;
+}
+
+export interface AuthInternal {
+	type: 'internal';
 }
 
 export interface VersionSets {
@@ -100,4 +110,8 @@ export interface GetSubscriptionStatusRequest {
 
 export interface GetSubscriptionStatusResponse {
 	subscription: 'beak_alpha';
+}
+
+export interface EnrollAlphaUserRequest {
+	email: string;
 }
