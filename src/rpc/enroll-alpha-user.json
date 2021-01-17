@@ -1,0 +1,15 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+
+	"required": [
+		"email"
+	],
+
+	"properties": {
+		"email": {
+			"type": "string",
+			"minLength": 1
+		}
+	}
+}
