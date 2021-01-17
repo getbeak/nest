@@ -106,13 +106,26 @@ Effectively a heartbeat request to check the status of the user's subscription e
 }
 ```
 
+### `enroll_alpha_user`
+
+Creates and enrolls a user in the Alpha.
+
+#### Request
+
+```json
+{
+	"email": "taylor.swift@gmail.com"
+}
+```
+
 ## Note
 
-To deploy run the following:
+To create a bundle that can be deployed, run the following
 
-```
+```bash
 yarn
 yarn build
 rm -rf ./node_modules
 yarn package
+yarn
 ```
