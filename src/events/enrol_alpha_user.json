@@ -4,7 +4,7 @@
 	"rawPath": "/1/2020-12-14/enrol_alpha_user",
 	"rawQueryString": "",
 	"cookies": [],
-	"body": "{\"email\": \"test+1@getbeak.app\"",
+	"body": "{\"email\": \"test+1@getbeak.app\"}",
 	"headers": {
 		"accept": "application/json",
 		"content-length": "0",
@@ -14,7 +14,8 @@
 		"x-amzn-trace-id": "Root=1-5e6722a7-cc56xmpl46db7ae02d4da47e",
 		"x-forwarded-for": "205.255.255.176",
 		"x-forwarded-port": "443",
-		"x-forwarded-proto": "https"
+		"x-forwarded-proto": "https",
+		"authorization": "internal test"
 	},
 	"requestContext": {
 		"accountId": "1234567890",
