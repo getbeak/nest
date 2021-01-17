@@ -112,6 +112,6 @@ export interface GetSubscriptionStatusResponse {
 	subscription: 'beak_alpha';
 }
 
-export interface EnrollAlphaUserRequest {
+export interface EnrolAlphaUserRequest {
 	email: string;
 }

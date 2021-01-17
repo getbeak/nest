@@ -6,7 +6,7 @@ import { Logger } from 'tslog';
 import { App, Context, VersionSet, VersionSets } from '../types';
 import Squawk from '../utils/squawk';
 import authenticateUser, { authenticateUserSchema } from './authenticate-user';
-import enrollAlphaUser, { enrollAlphaUserSchema } from './enroll-alpha-user';
+import enrolAlphaUser, { enrolAlphaUserSchema } from './enrol-alpha-user';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
 import handleAuth from './middleware/auth';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
@@ -27,9 +27,9 @@ const v20201214: VersionSet = {
 		impl: getSubscriptionStatus,
 		schema: getSubscriptionStatusSchema,
 	},
-	enroll_alpha_user: {
-		impl: enrollAlphaUser,
-		schema: enrollAlphaUserSchema,
+	enrol_alpha_user: {
+		impl: enrolAlphaUser,
+		schema: enrolAlphaUserSchema,
 	},
 };
 

@@ -1,7 +1,7 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import jwt from 'jsonwebtoken';
 
-import { App, JWT } from '../../types';
+import { App, AuthInternal, AuthUser, JWT } from '../../types';
 import Squawk from '../../utils/squawk';
 
 export default async function handleAuth(app: App, event: APIGatewayProxyEventV2) {
@@ -30,7 +30,7 @@ export default async function handleAuth(app: App, event: APIGatewayProxyEventV2
 	}
 }
 
-async function handleBearer(app: App, token: string) {
+async function handleBearer(app: App, token: string): Promise<AuthUser> {
 	let decoded: JWT;
 
 	try {
@@ -59,7 +59,7 @@ async function handleBearer(app: App, token: string) {
 	};
 }
 
-function handleInternal(app: App, token: string) {
+function handleInternal(app: App, token: string): AuthInternal {
 	if (token !== app.config.internalKey)
 		throw new Squawk('access_denied');
 
