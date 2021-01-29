@@ -12,7 +12,6 @@ import handleAuth from './middleware/auth';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
 
 const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/;
-const methods = ['POST', 'OPTIONS'];
 
 const v20201214: VersionSet = {
 	send_magic_link: {
@@ -40,11 +39,13 @@ const versionSets: VersionSets = {
 const router = async (logger: Logger, app: App, event: APIGatewayProxyEventV2): Promise<Record<string, any> | null> => {
 	const method = event.requestContext.http.method.toUpperCase();
 
-	if (!method || !methods.includes(method))
-		throw new Squawk('method_not_supported');
-
+	// If an options header got through, then just return 204 and CORS will do the rest.
+	// This is because CORS is handled by API Gateway
 	if (method === 'OPTIONS')
 		return null;
+
+	if (!method || method !== 'POST')
+		throw new Squawk('method_not_supported');
 
 	const { version, endpoint } = parsePath(event.rawPath);
 	const versionSet = versionSets[version];
