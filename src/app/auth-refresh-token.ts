@@ -8,7 +8,7 @@ export async function validateRefreshToken(ctx: Context, request: AuthenticateUs
 
 	const [version, refTokId, refTokKey, ...spare] = request.refreshToken.split('.');
 
-	if (!version || !refTokId || refTokKey || spare.length > 0)
+	if (!version || !refTokId || !refTokKey || spare.length > 0)
 		throw new Squawk('malformed_refresh_token');
 
 	const refTok = await ctx.app.dbClient.refreshTokens.findById(refTokId);
