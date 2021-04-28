@@ -37,7 +37,7 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 	const emailUrl = `${client.redirectUri}?code=${code}&state=${encodeURIComponent(request.state)}`;
 
 	const emailText = [
-		'Your Beak magic link is below. Enter it into your browser to get going!',
+		'🐦 Your Beak magic link is below. Click or paste it into your browser to get going!',
 		'',
 		emailUrl,
 		'',
@@ -46,7 +46,7 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 	].join('\n');
 
 	const emailHtml = [
-		'Your requested <a href="https://getbeak.app">Beak</a> login',
+		'<b>🐦 Your requested Beak magic link!</b>',
 		'',
 		`<a href="${emailUrl}">Get going!</a>`,
 		'',
