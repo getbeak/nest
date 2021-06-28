@@ -7,10 +7,6 @@ import snakeCaseKeys from 'snakecase-keys';
 import { Logger } from 'tslog';
 
 import createApp from './app';
-import authenticateUserEvent from './events/authenticate_user.json';
-import getSubscriptionStatusEvent from './events/get_subscription_status.json';
-import sendMagicLinkEvent from './events/send_magic_link.json';
-import enrolAlphaUserEvent from './events/enrol_alpha_user.json';
 import router from './rpc/router';
 import { Config } from './types';
 import Squawk from './utils/squawk';
@@ -62,13 +58,6 @@ function getConfig(): Config {
 		stpSecretKey: process.env.STRIPE_SECRET_KEY ?? '',
 	};
 }
-
-const events = {
-	sendMagicLink: sendMagicLinkEvent,
-	authenticateUser: authenticateUserEvent,
-	getSubscriptionStatus: getSubscriptionStatusEvent,
-	enrolAlphaUser: enrolAlphaUserEvent,
-};
 
 const logger = new Logger();
 const app = createApp(getConfig());
@@ -126,10 +115,3 @@ function getHeader(headers: APIGatewayProxyEventHeaders, key: string) {
 
 	return headers[header];
 }
-
-export const run = async () => {
-	// logger.info(await handler(events.sendMagicLink as APIGatewayProxyEventV2));
-	// logger.info(await handler(events.enrolAlphaUser as APIGatewayProxyEventV2));
-	// logger.info(await handler(events.authenticateUser as APIGatewayProxyEventV2));
-	// logger.info(await handler(events.getSubscriptionStatus as APIGatewayProxyEventV2));
-};
