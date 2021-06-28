@@ -10,6 +10,7 @@ import { handler } from '../';
 const port = 3001;
 const server = express();
 
+server.use(express.json());
 server.all('*', async (req, res) => {
 	const event = createGatewayRequestEvent(req);
 	const responseEvent = await handler(event);
