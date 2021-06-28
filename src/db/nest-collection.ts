@@ -14,9 +14,7 @@ export default abstract class NestCollection<T extends Record<string, any>> {
 		this.collection = db.collection(collectionName);
 	}
 
-	protected setupIndexes() {
-		
-	}
+	protected setupIndexes() { /* */ }
 
 	async createOne(item: T) {
 		const mongoItem = this.convertToMongoDocument(item);
