@@ -33,7 +33,7 @@ H+xi7glE9uUzfomYiJVzbQyvL8CwouqM2xpfowpIdrIWq5NFJxRLEOOWpQRK3bXW
 -----END PUBLIC KEY-----`;
 
 function getConfig(): Config {
-	const env = process.env.APP_ENV ?? 'test';
+	const env = process.env.APP_ENV ?? 'local';
 	const internalKey = process.env.INTERNAL_KEY ?? 'test';
 
 	const [jwtPrivateKey, jwtPublicKey] = (function readJwtEnv() {
