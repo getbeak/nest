@@ -1,4 +1,8 @@
-import { APIGatewayProxyEventHeaders, APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
+import {
+	APIGatewayProxyEventHeaders,
+	APIGatewayProxyEventV2,
+	APIGatewayProxyResultV2,
+} from 'aws-lambda';
 import express, { Request, Response } from 'express';
 
 import { handler } from '../';
