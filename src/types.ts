@@ -61,7 +61,7 @@ export interface JWT {
 	exp: number;
 }
 
-export type GrantType = 'authorization_code' | 'refresh_token' | 'access_token';
+export type GrantType = 'authorization_code' | 'refresh_token';
 
 export interface Grant {
 	type: GrantType;

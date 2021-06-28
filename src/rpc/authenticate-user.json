@@ -15,7 +15,7 @@
 
 		"grant_type": {
 			"type": "string",
-			"enum": ["authorization_code"]
+			"enum": ["refresh_token", "authorization_code"]
 		},
 
 		"redirect_uri": {
