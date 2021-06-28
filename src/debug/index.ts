@@ -1,7 +1,7 @@
 import {
 	APIGatewayProxyEventHeaders,
 	APIGatewayProxyEventV2,
-	APIGatewayProxyResultV2,
+	APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
 import express, { Request, Response } from 'express';
 
@@ -53,6 +53,12 @@ function createGatewayRequestEvent(req: Request): APIGatewayProxyEventV2 {
 	};
 }
 
-function mapResponseEventToResponse(event: APIGatewayProxyResultV2, res: Response) {
-	res.json(event);
+function mapResponseEventToResponse(event: APIGatewayProxyStructuredResultV2, res: Response) {
+	res.statusCode = event.statusCode!;
+	
+	Object.keys(event.headers!).map(k => {
+		res.setHeader(k, event.headers![k] as string);
+	});
+
+	res.send(event.body);
 }

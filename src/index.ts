@@ -1,7 +1,6 @@
 import {
-	APIGatewayProxyEventHeaders,
 	APIGatewayProxyEventV2,
-	APIGatewayProxyResultV2,
+	APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
 import snakeCaseKeys from 'snakecase-keys';
 import { Logger } from 'tslog';
@@ -62,7 +61,7 @@ function getConfig(): Config {
 const logger = new Logger();
 const app = createApp(getConfig());
 
-export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyStructuredResultV2> => {
 	await app.dbClient.connect();
 
 	try {
@@ -82,7 +81,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 };
 
 function createResponse(statusCode: number, body?: string) {
-	const response: APIGatewayProxyResultV2 = {
+	const response: APIGatewayProxyStructuredResultV2 = {
 		statusCode,
 		body: void 0,
 		headers: {
