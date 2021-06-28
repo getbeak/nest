@@ -72,10 +72,17 @@ const router = async (logger: Logger, app: App, event: APIGatewayProxyEventV2): 
 
 	let request: any = null;
 
+	if (event.body === void 0 && schema !== void 0)
+		throw new Squawk('body_missing');
+
 	if (event.body !== void 0) {
 		const originalRequest = JSON.parse(event.body);
 
-		validate(originalRequest, schema, { throwError: true });
+		try {
+			validate(originalRequest, schema, { throwError: true });
+		} catch (error) {
+			throw new Squawk('validation_failed', error);
+		}
 
 		request = camelCaseKeys(originalRequest);
 	}
