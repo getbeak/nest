@@ -11,7 +11,12 @@
     "module": "CommonJS",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "skipLibCheck": true // temp, remove this. stupid aws
+    "skipLibCheck": true, // temp, remove this. stupid aws
+
+    "typeRoots": [
+      "./src/typings",
+      "./node_modules/@types"
+    ]
   },
   "include": [
     "src/**/*.ts"
