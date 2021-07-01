@@ -9,7 +9,17 @@ export interface Client {
 
 const clients: Client[] = [{
 	id: 'client_000000C2kdCzNlbL1BqR5FeMatItU',
-	name: 'Beak app',
+	name: 'Beak app (macOS)',
+	enabled: true,
+	redirectUri: ['https://magic.getbeak.app/'],
+}, {
+	id: 'client_000000CAixjPMTECPznenOM8rKRxQ',
+	name: 'Beak app (linux)',
+	enabled: true,
+	redirectUri: ['https://magic.getbeak.app/'],
+}, {
+	id: 'client_000000CAixkP7YVb0cH1zvNfE5mYi',
+	name: 'Beak app (windows)',
 	enabled: true,
 	redirectUri: ['https://magic.getbeak.app/'],
 }, {
