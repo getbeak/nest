@@ -118,6 +118,39 @@ Creates and enrolls a user in the Alpha.
 }
 ```
 
+### `list_news_items`
+
+Lists the currently available news items for a client.
+
+#### Request
+
+```json
+{
+	"client_id": "client_000"
+}
+```
+
+#### Response
+
+```json
+[{
+	"id": "newsitem_000",
+	"primary": {
+		"code": "generic_banner",
+		"payload": {
+			"emoji": "💃",
+			"title": "Very important message",
+			"body": "You just know how important it is, you know",
+			"action": {
+				"cta": "Click me",
+				"url": "https://meatspin.com/"
+			}
+		}
+	},
+	"fallback": null
+}]
+```
+
 ## Note
 
 To create a bundle that can be deployed, run the following
