@@ -115,3 +115,26 @@ export interface GetSubscriptionStatusResponse {
 export interface EnrolAlphaUserRequest {
 	email: string;
 }
+
+export interface ListNewsItemsRequest {
+	clientId: string;
+}
+
+export interface NewsItem {
+	id: string;
+	primary: NewsItemGenericBanner;
+	fallback: null | NewsItemGenericBanner;
+}
+
+export interface NewsItemGenericBanner {
+	code: 'generic_banner';
+	payload: {
+		emoji: string;
+		title: string;
+		body: string;
+		action: {
+			url: string;
+			cta: string;
+		} | null;
+	};
+}

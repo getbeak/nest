@@ -65,7 +65,7 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 		Destination: {
 			ToAddresses: [request.identifierValue],
 		},
-		Source: 'no-reply@getbeak.app',
+		Source: 'Beak App <no-reply@getbeak.app>',
 		Message: {
 			Body: {
 				Text: {

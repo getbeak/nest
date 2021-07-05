@@ -8,6 +8,7 @@ import Squawk from '../utils/squawk';
 import authenticateUser, { authenticateUserSchema } from './authenticate-user';
 import enrolAlphaUser, { enrolAlphaUserSchema } from './enrol-alpha-user';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
+import listNewsItems, { listNewsItemsSchema } from './list-news-items';
 import handleAuth from './middleware/auth';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
 
@@ -29,6 +30,10 @@ const v20201214: VersionSet = {
 	enrol_alpha_user: {
 		impl: enrolAlphaUser,
 		schema: enrolAlphaUserSchema,
+	},
+	list_news_items: {
+		impl: listNewsItems,
+		schema: listNewsItemsSchema,
 	},
 };
 
