@@ -12,7 +12,8 @@
     "compile": "tsc -b tsconfig.json",
     "start": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"tsc -b tsconfig.debug.json && node dist/debug/index.js\"",
     "demo": "node -e \"require('./dist').run()\"",
-    "package": "yarn install --production --ignore-optional && zip -r bundle.zip . -x .git/\\* -x src/\\* -x bundle.zip"
+    "package": "yarn install --production --ignore-optional && zip -r bundle.zip . -x .git/\\* -x src/\\* -x bundle.zip",
+    "bundle": "yarn && yarn build && rm -rf ./node_modules && yarn package && yarn"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.66",
