@@ -128,6 +128,7 @@ export interface NewsItem {
 
 export interface NewsItemGenericBanner {
 	code: 'generic_banner';
+	dismissible: boolean;
 	payload: {
 		emoji: string;
 		title: string;
