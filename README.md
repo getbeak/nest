@@ -137,6 +137,7 @@ Lists the currently available news items for a client.
 	"id": "newsitem_000",
 	"primary": {
 		"code": "generic_banner",
+		"dismissible": false,
 		"payload": {
 			"emoji": "💃",
 			"title": "Very important message",
@@ -149,16 +150,4 @@ Lists the currently available news items for a client.
 	},
 	"fallback": null
 }]
-```
-
-## Note
-
-To create a bundle that can be deployed, run the following
-
-```bash
-yarn
-yarn build
-rm -rf ./node_modules
-yarn package
-yarn
 ```
