@@ -8,8 +8,11 @@ export async function getOrCreateUser(ctx: Context, emailAddress: string) {
 		email: emailAddress,
 	});
 
-	if (existingUser.data.length === 1)
-		return { userId: existingUser.data[0].metadata['user_id'], stpUserId: existingUser.data[0].id };
+	if (existingUser.data.length === 1) {
+		const existingStripeUser = existingUser.data[0];
+
+		return { userId: existingStripeUser.metadata['user_id'], stripeUser: existingStripeUser };
+	}
 
 	const userId = ksuid.generate('user').toString();
 	const customer = await ctx.app.stripeClient.customers.create({
@@ -24,7 +27,7 @@ export async function getOrCreateUser(ctx: Context, emailAddress: string) {
 		stpUserId: customer.id,
 	});
 
-	return { userId, stpUserId: customer.id };
+	return { userId, stripeUser: customer };
 }
 
 export async function getCustomerEmail(ctx: Context, customerId: string) {
