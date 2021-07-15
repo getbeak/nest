@@ -1,5 +1,5 @@
 import { SendEmailCommand } from '@aws-sdk/client-ses';
-import fs from 'fs/promises';
+import { promises as fs } from 'fs';
 
 import { Context, EnrolAlphaUserRequest } from '../types';
 import Squawk from '../utils/squawk';
