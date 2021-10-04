@@ -151,3 +151,96 @@ Lists the currently available news items for a client.
 	"fallback": null
 }]
 ```
+
+## Internal data
+
+All internal data is stored in MongoDB. All schema definitions are using TypeScript definitions.
+
+### `access_tokens`
+
+```ts
+interface AccessToken {
+	id: string;
+	clientId: string;
+	userId: string;
+	grant: Grant;
+	rootGrant: Grant;
+	cidrBlocks: string[];
+	createdAt: string;
+	expiresAt: string;
+	revokedAt: string | null;
+}
+```
+
+### `authorizations`
+
+```ts
+interface Authorizations {
+	id: string;
+	key: string;
+	clientId: string;
+	state: string;
+	codeChallengeMethod: 'S256';
+	codeChallenge: string;
+	redirectUri: string;
+	identifierType: 'email';
+	identifierValue: string;
+	createdAt: string;
+	expiresAt: string;
+	usedAt: string | null;
+	revokedAt: string | null;
+}
+```
+
+### `identifiers`
+
+```ts
+interface Identifiers {
+	id: string;
+	identifierType: 'email';
+	identifierValue: string;
+	verifiedAt: string;
+	createdAt: string;
+	updatedAt: string | null;
+}
+```
+
+### `refresh_tokens`
+
+```ts
+interface RefreshTokens {
+	id: string;
+	key: string;
+	clientId: string;
+	userId: string;
+	grant: Grant;
+	rootGrant: Grant;
+	cidrBlocks: string[];
+	createdAt: string;
+	expiresAt: string;
+	usedAt: string | null;
+	revokedAt: string | null;
+}
+```
+
+### `subscriptions`
+
+```ts
+interface Subscriptions {
+	id: string;
+	stripeSubscriptionId: string;
+	createdAt: string;
+	updatedAt: string | null;
+}
+```
+
+### `users`
+
+```ts
+interface Users {
+	id: string;
+	stpUserId: string | null;
+	createdAt: string;
+	updatedAt: string | null;
+}
+```
