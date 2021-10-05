@@ -7,6 +7,8 @@ Nonprod URL: `https://nest.nonprod-getbeak.app/1/`
 
 ## API methods
 
+The API has no prefix, it goes straight to the version information.
+
 **Versions**:
 
 - `2020-12-14`: Initial version
@@ -156,7 +158,7 @@ Lists the currently available news items for a client.
 
 ## Webhooks
 
-Prefix: `webhook/`
+Webhooks URL's comprise of two parts; the webhook indicator, followed by the provider value. Each provider has an example below.
 
 ### `stripe`
 
@@ -177,7 +179,6 @@ Stripe webhooks are used to invoke internal logic based on changing states of a 
 - `payment_intent.payment_failed`
 - `payment_intent.processing`
 - `payment_intent.succeeded`
-
 
 ## Internal data
 
