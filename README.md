@@ -271,10 +271,11 @@ interface RefreshTokens {
 ```ts
 interface Subscriptions {
 	id: string;
-	stpSubscriptionId: string;
+	userId: string;
 	stpProductId: string;
+	stpSubscriptionId: string;
 	startsAt: string;
-	endsAt: string | null;
+	endsAt: string;
 	createdAt: string;
 	updatedAt: string | null;
 }
