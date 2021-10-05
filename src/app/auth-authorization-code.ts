@@ -3,7 +3,6 @@ import crypto from 'crypto';
 import { AuthenticateUserAuthorizationCode, Context, Grant } from '../types';
 import Squawk from '../utils/squawk';
 import revokeTokens from './revoke-tokens';
-import { getOrCreateUser } from './stripe-users';
 
 export async function validateAuthorizationCode(ctx: Context, request: AuthenticateUserAuthorizationCode) {
 	if (!request.code)
@@ -49,7 +48,7 @@ export async function handleAuthorizationCode(ctx: Context, request: Authenticat
 	const [authCode] = request.code.split('.');
 	const record = await ctx.app.dbClient.authorizations.findById(authCode);
 
-	const [{ userId }] = await Promise.all([
+	const [userId] = await Promise.all([
 		getOrCreateUser(ctx, record.identifierValue),
 		ctx.app.dbClient.authorizations.setAsUsed(authCode),
 	]);
@@ -62,6 +61,28 @@ export async function handleAuthorizationCode(ctx: Context, request: Authenticat
 	};
 
 	return { userId, grant, rootGrant: grant };
+}
+
+async function getOrCreateUser(ctx: Context, identifierValue: string) {
+	try {
+		const identifier = await ctx.app.dbClient.identifiers.findActiveEmailIdentifier(identifierValue);
+
+		if (identifier.verifiedAt === null)
+			await ctx.app.dbClient.identifiers.setIdentifierAsVerified(identifier.id);
+
+		return identifier.userId;
+	} catch (error) {
+		const squawk = Squawk.coerce(error);
+
+		if (squawk.code !== 'not_found')
+			throw error;
+	}
+
+	const userId = await ctx.app.dbClient.users.createUser();
+	
+	await ctx.app.dbClient.identifiers.createIdentifier(identifierValue, 'email', userId, true);
+
+	return userId;
 }
 
 function createCodeChallenge(codeVerifier: string) {
