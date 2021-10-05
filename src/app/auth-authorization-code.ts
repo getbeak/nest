@@ -63,7 +63,7 @@ export async function handleAuthorizationCode(ctx: Context, request: Authenticat
 	return { userId, grant, rootGrant: grant };
 }
 
-async function getOrCreateUser(ctx: Context, identifierValue: string) {
+export async function getOrCreateUser(ctx: Context, identifierValue: string) {
 	try {
 		const identifier = await ctx.app.dbClient.identifiers.findActiveEmailIdentifier(identifierValue);
 
