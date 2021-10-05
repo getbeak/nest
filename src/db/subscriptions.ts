@@ -46,7 +46,7 @@ export default class Subscriptions extends Collection<Subscription> {
 		const subscription = await this.collection.findOne({
 			userId,
 			// @ts-expect-error
-			endsAt: { $ne: null, $lt: now },
+			endsAt: { $ne: null, $gt: now },
 		});
 
 		return subscription;
