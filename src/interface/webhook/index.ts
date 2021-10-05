@@ -1,7 +1,7 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { Logger } from 'tslog';
 
-import { App } from '../../types';
+import { App, Context } from '../../types';
 import Squawk from '../../utils/squawk';
 import { handleStripeWebhook } from './stripe';
 
@@ -18,10 +18,20 @@ export const runner = async (
 	event: APIGatewayProxyEventV2,
 ): Promise<Record<string, unknown> | null> => {
 	const { webhookProvider } = parsePath(event.rawPath);
+	const ctx: Context = {
+		app,
+		logger,
+		auth: null,
+		request: {
+			awsRequestId: event.requestContext.requestId,
+			clientIp: event.requestContext.http.sourceIp,
+			userAgent: event.requestContext.http.userAgent,
+		},
+	};
 
 	switch (webhookProvider) {
 		case 'stripe':
-			return await handleStripeWebhook(logger, app, event);
+			return await handleStripeWebhook(ctx, event);
 
 		default:
 			throw new Squawk('unknown_webhook_provider');

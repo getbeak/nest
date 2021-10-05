@@ -1,13 +1,13 @@
+import handleNewSubscription from '../../app/handle-new-subscription';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import Stripe from 'stripe';
 import { Logger } from 'tslog';
-import { App } from '../../types';
+import { App, Context } from '../../types';
 import Squawk from '../../utils/squawk';
 
 export async function handleStripeWebhook(
-	logger: Logger,
-	app: App,
-	event: APIGatewayProxyEventV2
+	ctx: Context,
+	event: APIGatewayProxyEventV2,
 ): Promise<Record<string, unknown> | null> {
 	if (!event.body)
 		throw new Squawk('missing_webhook_body');
@@ -16,15 +16,20 @@ export async function handleStripeWebhook(
 	let stpEvent: Stripe.Event;
 
 	try {
-		stpEvent = app.stripeClient.webhooks.constructEvent(event.body, signature, app.config.stpWebhookSecret);
+		stpEvent = ctx.app.stripeClient.webhooks.constructEvent(event.body, signature, ctx.app.config.stpWebhookSecret);
 	} catch (error) {
 		throw new Squawk('invalid_webhook_payload', null, [Squawk.coerce(error)]);
 	}
 
 	switch (stpEvent.type) {
+		case 'customer.subscription.created':
+			const subscription = stpEvent.data.object as Record<string, string>;
+
+			await handleNewSubscription(ctx, subscription['id']);
+			break;
+
 		case 'charge.dispute.closed':
 		case 'charge.dispute.created':
-		case 'customer.subscription.created':
 		case 'customer.subscription.deleted':
 		case 'customer.subscription.trial_will_end':
 		case 'customer.subscription.updated':
@@ -33,7 +38,6 @@ export async function handleStripeWebhook(
 		case 'payment_intent.payment_failed':
 		case 'payment_intent.processing':
 		case 'payment_intent.succeeded':
-			// console.log(stpEvent);
 
 			break;
 

@@ -1,4 +1,5 @@
 import { Db } from 'mongodb';
+import ksuid from '@cuvva/ksuid';
 
 import Collection from './nest-collection';
 
@@ -24,5 +25,20 @@ export default class ProviderMappings extends Collection<ProviderMapping> {
 			providerValue: 1,
 			removedAt: 1,
 		});
+	}
+
+	async createMapping(userId: string, providerType: 'stripe', providerValue: string) {
+		const id = ksuid.generate('provmap').toString();
+
+		await this.collection.insertOne({
+			_id: id,
+			userId,
+			providerType,
+			providerValue,
+			createdAt: new Date().toISOString(),
+			removedAt: null,
+		});
+
+		return id;
 	}
 }
