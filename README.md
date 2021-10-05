@@ -4,11 +4,12 @@ Serverless API powering releases, user management, auth, etc. Have a poke around
 
 Base URL: `https://nest.getbeak.app/1/`
 
-## Versions
+## API methods
+
+**Versions**:
 
 - `2020-12-14`: Initial version
 
-## Methods
 
 ### `send_magic_link`
 
@@ -152,6 +153,32 @@ Lists the currently available news items for a client.
 }]
 ```
 
+
+## Webhooks
+
+Prefix: `webhook/`
+
+### `stripe`
+
+Full path: `1/webhook/stripe`
+
+Stripe webhooks are used to invoke internal logic based on changing states of a users subscription, payment, or god forbid, dispute.
+
+#### Supported events
+
+- `charge.dispute.closed`
+- `charge.dispute.created`
+- `customer.subscription.created`
+- `customer.subscription.deleted`
+- `customer.subscription.trial_will_end`
+- `customer.subscription.updated`
+- `payment_intent.canceled`
+- `payment_intent.created`
+- `payment_intent.payment_failed`
+- `payment_intent.processing`
+- `payment_intent.succeeded`
+
+
 ## Internal data
 
 All internal data is stored in MongoDB. All schema definitions are using TypeScript definitions.
@@ -199,9 +226,9 @@ interface Identifiers {
 	id: string;
 	identifierType: 'email';
 	identifierValue: string;
-	verifiedAt: string;
 	createdAt: string;
 	updatedAt: string | null;
+	verifiedAt: string;
 }
 ```
 
@@ -228,7 +255,10 @@ interface RefreshTokens {
 ```ts
 interface Subscriptions {
 	id: string;
-	stripeSubscriptionId: string;
+	stpSubscriptionId: string;
+	stpProductId: string;
+	startsAt: string;
+	endsAt: string | null;
 	createdAt: string;
 	updatedAt: string | null;
 }
