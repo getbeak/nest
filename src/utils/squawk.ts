@@ -27,7 +27,7 @@ export default class Squawk extends Error {
 		defineNonSerializable(this, 'message', this.code);
 	}
 
-	static isSquawk(error: Error) {
+	static isSquawk(error: Error | unknown) {
 		return (error instanceof Squawk);
 	}
 
