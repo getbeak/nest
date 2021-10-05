@@ -2,7 +2,8 @@
 
 Serverless API powering releases, user management, auth, etc. Have a poke around! :)
 
-Base URL: `https://nest.getbeak.app/1/`
+Prod URL: `https://nest.getbeak.app/1/`
+Nonprod URL: `https://nest.nonprod-getbeak.app/1/`
 
 ## API methods
 
@@ -232,6 +233,19 @@ interface Identifiers {
 }
 ```
 
+### `provider_mappings`
+
+```ts
+interface ExternalMappings {
+	id: string;
+	userId: string;
+	providerType: 'stripe';
+	providerValue: string;
+	createdAt: string;
+	removedAt: string | null;
+}
+```
+
 ### `refresh_tokens`
 
 ```ts
@@ -269,8 +283,6 @@ interface Subscriptions {
 ```ts
 interface Users {
 	id: string;
-	stpUserId: string | null;
 	createdAt: string;
-	updatedAt: string | null;
 }
 ```
