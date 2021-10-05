@@ -1,5 +1,4 @@
 import { Context } from '../types';
-import { getCustomerEmail } from './stripe-users';
 
 interface RevokeOptions {
 	accessTokens: boolean;
@@ -41,11 +40,7 @@ async function revokeAccessTokens(ctx: Context, userId: string, clientId: string
 }
 
 async function revokeAuthorizations(ctx: Context, userId: string, clientId: string) {
-	const user = await ctx.app.dbClient.users.findById(userId);
-	const email = await getCustomerEmail(ctx, user.stpUserId);
+	const identifier = await ctx.app.dbClient.identifiers.findActiveEmailIdentifierByUser(userId);
 
-	if (email === null)
-		return;
-
-	await ctx.app.dbClient.authorizations.setManyAsRevoked('email', email, clientId);
+	await ctx.app.dbClient.authorizations.setManyAsRevoked(identifier.identifierType, identifier.identifierValue, clientId);
 }

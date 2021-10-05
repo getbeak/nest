@@ -1,3 +1,4 @@
+import ksuid from '@cuvva/ksuid';
 import { Db } from 'mongodb';
 
 import Collection from './nest-collection';
@@ -13,4 +14,15 @@ export default class Users extends Collection<User> {
 	}
 
 	async setupIndexes() { /* No indexes needed */ }
+
+	async createUser() {
+		const id = ksuid.generate('user').toString();
+
+		await this.collection.insertOne({
+			_id: id,
+			createdAt: new Date().toISOString(),
+		});
+
+		return id;
+	}
 }

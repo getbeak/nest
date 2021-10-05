@@ -225,11 +225,13 @@ interface Authorizations {
 ```ts
 interface Identifiers {
 	id: string;
+	userId: string;
 	identifierType: 'email';
 	identifierValue: string;
 	createdAt: string;
 	updatedAt: string | null;
 	verifiedAt: string;
+	removedAt: string | null;
 }
 ```
 
