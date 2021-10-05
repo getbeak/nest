@@ -2,16 +2,19 @@ import { Db } from 'mongodb';
 
 import Collection from './nest-collection';
 
-export interface User {
+export interface Subscription {
 	id: string;
-	stpUserId: string;
+	stpSubscriptionId: string;
+	stpProductId: string;
+	startsAt: string;
+	endsAt: string | null;
 	createdAt: string;
 	updatedAt: string | null;
 }
 
-export default class Users extends Collection<User> {
+export default class Subscriptions extends Collection<Subscription> {
 	constructor(db: Db) {
-		super(db, 'users');
+		super(db, 'subscriptions');
 	}
 
 	async setupIndexes() {
