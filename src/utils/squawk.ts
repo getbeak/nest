@@ -31,7 +31,7 @@ export default class Squawk extends Error {
 		return (error instanceof Squawk);
 	}
 
-	static coerce(error: Error) {
+	static coerce(error: Error | unknown) {
 		if (Squawk.isSquawk(error))
 			return error as Squawk;
 

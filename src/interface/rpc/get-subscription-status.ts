@@ -1,7 +1,7 @@
 
-import getSubscriptionStatusImpl from '../app/get-subscription-status';
-import { Context, GetSubscriptionStatusRequest } from '../types';
-import Squawk from '../utils/squawk';
+import getSubscriptionStatusImpl from '../../app/get-subscription-status';
+import { Context, GetSubscriptionStatusRequest } from '../../types';
+import Squawk from '../../utils/squawk';
 import getSubscriptionStatusSchema from './get-subscription-status.json';
 
 export default async function getSubscriptionStatus(ctx: Context, request: GetSubscriptionStatusRequest) {

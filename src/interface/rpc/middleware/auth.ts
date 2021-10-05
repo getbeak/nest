@@ -1,8 +1,8 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import jwt from 'jsonwebtoken';
 
-import { App, AuthInternal, AuthUser, JWT } from '../../types';
-import Squawk from '../../utils/squawk';
+import { App, AuthInternal, AuthUser, JWT } from '../../../types';
+import Squawk from '../../../utils/squawk';
 
 export default async function handleAuth(app: App, event: APIGatewayProxyEventV2) {
 	// ofc it's fucking case sensitive
@@ -36,7 +36,7 @@ async function handleBearer(app: App, token: string): Promise<AuthUser> {
 	try {
 		decoded = jwt.verify(token, app.config.jwtPublicKey, { algorithms: ['ES512'] }) as JWT;
 	} catch (error) {
-		if (error.message === 'jwt expired')
+		if (error instanceof Error && error.message === 'jwt expired')
 			throw new Squawk('unauthorized', null, [new Squawk('token_expired')]);
 
 		throw error;

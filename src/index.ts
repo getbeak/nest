@@ -1,4 +1,4 @@
-import {
+import type {
 	APIGatewayProxyEventV2,
 	APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
@@ -6,7 +6,7 @@ import snakeCaseKeys from 'snakecase-keys';
 import { Logger } from 'tslog';
 
 import createApp from './app';
-import router from './rpc/router';
+import * as rpc from './interface/rpc';
 import { Config } from './types';
 import Squawk from './utils/squawk';
 
@@ -34,7 +34,7 @@ function getConfig(): Config {
 	const [jwtPrivateKey, jwtPublicKey] = (function readJwtEnv() {
 		const jwtKeys = process.env.JWT_KEYS;
 
-		if (!jwtKeys && env !== 'prod')
+		if (!jwtKeys && env === 'local')
 			return [jwtPrivateKeyTest, jwtPublicKeyTest];
 
 		if (!jwtKeys)
@@ -45,7 +45,7 @@ function getConfig(): Config {
 		return [privateKey, publicKey];
 	}());
 
-	if (internalKey === 'test' && env === 'prod')
+	if (internalKey === 'test' && env !== 'local')
 		throw new Squawk('internal_key_not_set');
 
 	return {
@@ -65,7 +65,12 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 	await app.dbClient.connect();
 
 	try {
-		const response = await router(logger, app, event);
+		let response;
+
+		if (rpc.qualifier(logger, app, event))
+			response = rpc.runner(logger, app, event);
+		else
+			throw new Squawk('not_found');
 
 		if (!response)
 			return createResponse(204);
@@ -74,7 +79,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 	} catch (error) {
 		logger.error(error);
 
-		const squawk = Squawk.isSquawk(error) ? error : Squawk.coerce(error);
+		const squawk = Squawk.coerce(error);
 
 		return createResponse(500, JSON.stringify(snakeCaseKeys(squawk)));
 	}

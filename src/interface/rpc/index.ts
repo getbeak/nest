@@ -3,8 +3,8 @@ import camelCaseKeys from 'camelcase-keys';
 import { validate } from 'jsonschema';
 import { Logger } from 'tslog';
 
-import { App, Context, VersionSet, VersionSets } from '../types';
-import Squawk from '../utils/squawk';
+import { App, Context, VersionSet, VersionSets } from '../../types';
+import Squawk from '../../utils/squawk';
 import authenticateUser, { authenticateUserSchema } from './authenticate-user';
 import enrolAlphaUser, { enrolAlphaUserSchema } from './enrol-alpha-user';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
@@ -13,6 +13,7 @@ import handleAuth from './middleware/auth';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
 
 const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/;
+const qualifierRegex = /^\/\d\/[\d-]+\//;
 
 const v20201214: VersionSet = {
 	send_magic_link: {
@@ -41,7 +42,15 @@ const versionSets: VersionSets = {
 	'2020-12-14': v20201214,
 };
 
-const router = async (logger: Logger, app: App, event: APIGatewayProxyEventV2): Promise<Record<string, any> | null> => {
+export function qualifier(_logger: Logger, _app: App, event: APIGatewayProxyEventV2): boolean {
+	return qualifierRegex.test(event.requestContext.http.path);
+}
+
+export const runner = async (
+	logger: Logger,
+	app: App,
+	event: APIGatewayProxyEventV2,
+): Promise<Record<string, unknown> | null> => {
 	const method = event.requestContext.http.method.toUpperCase();
 
 	// If an options header got through, then just return 204 and CORS will do the rest.
@@ -86,7 +95,7 @@ const router = async (logger: Logger, app: App, event: APIGatewayProxyEventV2): 
 		try {
 			validate(originalRequest, schema, { throwError: true });
 		} catch (error) {
-			throw new Squawk('validation_failed', error);
+			throw new Squawk('validation_failed', error as Record<string, unknown>);
 		}
 
 		request = camelCaseKeys(originalRequest);
@@ -109,4 +118,3 @@ function parsePath(path: string) {
 	return { version: dateVersion, endpoint };
 }
 
-export default router;
