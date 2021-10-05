@@ -9,6 +9,7 @@ export interface Config {
 	jwtPublicKey: string;
 	jwtPrivateKey: string;
 	stpSecretKey: string;
+	stpWebhookSecret: string;
 	mongoUri: string;
 	internalKey: string;
 }

@@ -41,7 +41,7 @@
     "mongodb": "^3.6.3",
     "node-fetch": "^2.6.1",
     "snakecase-keys": "^3.2.1",
-    "stripe": "^8.129.0",
+    "stripe": "^8.178.0",
     "tslog": "^3.0.1"
   }
 }

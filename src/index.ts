@@ -49,13 +49,20 @@ function getConfig(): Config {
 	if (internalKey === 'test' && env !== 'local')
 		throw new Squawk('internal_key_not_set');
 
+	const stpSecretKey = process.env.STRIPE_SECRET_KEY;
+	const stpWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+	if (!stpSecretKey || !stpWebhookSecret)
+		throw new Squawk('missing_stripe_config');
+
 	return {
 		env,
 		jwtPrivateKey,
 		jwtPublicKey,
 		internalKey,
 		mongoUri: process.env.MONGO_URI ?? 'mongodb://localhost/local-nest-beak',
-		stpSecretKey: process.env.STRIPE_SECRET_KEY ?? '',
+		stpSecretKey,
+		stpWebhookSecret,
 	};
 }
 
