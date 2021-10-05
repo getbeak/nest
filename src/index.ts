@@ -7,6 +7,7 @@ import { Logger } from 'tslog';
 
 import createApp from './app';
 import * as rpc from './interface/rpc';
+import * as webhook from './interface/webhook';
 import { Config } from './types';
 import Squawk from './utils/squawk';
 
@@ -69,6 +70,8 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 
 		if (rpc.qualifier(logger, app, event))
 			response = rpc.runner(logger, app, event);
+		else if (webhook.qualifier(logger, app, event))
+			response = webhook.runner(logger, app, event);
 		else
 			throw new Squawk('not_found');
 
