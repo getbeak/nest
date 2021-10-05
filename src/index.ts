@@ -70,15 +70,14 @@ const logger = new Logger();
 const app = createApp(getConfig());
 
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyStructuredResultV2> => {
-	await app.dbClient.connect();
-
 	try {
 		let response;
+		await app.dbClient.connect();
 
 		if (rpc.qualifier(logger, app, event))
-			response = rpc.runner(logger, app, event);
+			response = await rpc.runner(logger, app, event);
 		else if (webhook.qualifier(logger, app, event))
-			response = webhook.runner(logger, app, event);
+			response = await webhook.runner(logger, app, event);
 		else
 			throw new Squawk('not_found');
 

@@ -10,9 +10,15 @@ import { handler } from '../';
 const port = 3001;
 const server = express();
 
-server.use(express.json());
-server.all('*', async (req, res) => {
-	const event = createGatewayRequestEvent(req);
+server.post('/1/webhook/*', express.raw({ type: 'application/json' }), async (req, res) => {
+	const event = createGatewayRequestEvent(req, true);
+	const responseEvent = await handler(event);
+
+	mapResponseEventToResponse(responseEvent, res);
+});
+
+server.post('*', express.json(), async (req, res) => {
+	const event = createGatewayRequestEvent(req, false);
 	const responseEvent = await handler(event);
 
 	mapResponseEventToResponse(responseEvent, res);
@@ -21,13 +27,13 @@ server.all('*', async (req, res) => {
 // eslint-disable-next-line no-console
 server.listen(port, () => console.log(`App listening on port ${port}`));
 
-function createGatewayRequestEvent(req: Request): APIGatewayProxyEventV2 {
+function createGatewayRequestEvent(req: Request, rawBody: boolean): APIGatewayProxyEventV2 {
 	return {
 		headers: req.headers as APIGatewayProxyEventHeaders,
 		isBase64Encoded: true,
 		version: '2.0',
 		cookies: [],
-		body: JSON.stringify(req.body),
+		body: rawBody ? req.body : JSON.stringify(req.body),
 		routeKey: `ANY ${req.path}`,
 		rawPath: req.path,
 		rawQueryString: '',
@@ -62,4 +68,5 @@ function mapResponseEventToResponse(event: APIGatewayProxyStructuredResultV2, re
 	});
 
 	res.send(event.body);
+	res.end();
 }

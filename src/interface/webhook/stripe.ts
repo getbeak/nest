@@ -33,8 +33,13 @@ export async function handleStripeWebhook(
 		case 'payment_intent.payment_failed':
 		case 'payment_intent.processing':
 		case 'payment_intent.succeeded':
+			// console.log(stpEvent);
+
+			break;
 
 		default:
-			return null;
+			break;
 	}
+
+	return { received: true };
 }
