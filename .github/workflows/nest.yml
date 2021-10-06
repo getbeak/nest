@@ -34,14 +34,9 @@ jobs:
         env:
           BUILD_ENVIRONMENT: ci
           COMMIT_IDENTIFIER: ${{ github.sha }}
-          SENTRY_NEST_API_KEY: ${{ secrets.SENTRY_NEST_API_KEY }}
         run: yarn bundle:release
 
-      - name: Build, package, bundle, and clear
-        env:
-          BUILD_ENVIRONMENT: ci
-          COMMIT_IDENTIFIER: ${{ github.sha }}
-          SENTRY_NEST_API_KEY: ${{ secrets.SENTRY_NEST_API_KEY }}
+      - name: Prepare artifact for S3
         run: |
             mkdir release
             cp bundle.zip release/${{ github.sha }}.zip
@@ -50,7 +45,7 @@ jobs:
         uses: shallwefootball/upload-s3-action@v1.1.2
         with:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
           aws_bucket: ${{ secrets.AWS_S3_LAMBDA_BUCKET }}
-          source_dir: 'release'
+          source_dir: 'release/'
           destination_dir: '/commits/'
