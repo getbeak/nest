@@ -1,4 +1,4 @@
-import {
+import type {
 	APIGatewayProxyEventHeaders,
 	APIGatewayProxyEventV2,
 	APIGatewayProxyStructuredResultV2,
@@ -48,7 +48,6 @@ function createGatewayRequestEvent(req: Request, rawBody: boolean): APIGatewayPr
 				protocol: 'HTTP/1.2',
 				sourceIp: '172.168.1.69',
 				userAgent: 'Beak Debug Server',
-
 			},
 			requestId: 'test-id',
 			routeKey: `ANY ${req.path}`,

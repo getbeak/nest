@@ -1,7 +1,7 @@
 import ksuid from '@cuvva/ksuid';
 import { Db } from 'mongodb';
 
-import Collection from './nest-collection';
+import Collection, { MongoDocument } from './nest-collection';
 
 export interface Subscription {
 	id: string;
@@ -23,7 +23,13 @@ export default class Subscriptions extends Collection<Subscription> {
 		await this.collection.createIndex({ stpUserId: 1 });
 	}
 
-	async createSubscription(userId: string, stpProductId: string, stpSubscriptionId: string, startsAt: string, endsAt: string) {
+	async createSubscription(
+		userId: string,
+		stpProductId: string,
+		stpSubscriptionId: string,
+		startsAt: string,
+		endsAt: string,
+	) {
 		const id = ksuid.generate('sub').toString();
 
 		await this.collection.insertOne({
@@ -47,8 +53,8 @@ export default class Subscriptions extends Collection<Subscription> {
 			userId,
 			// @ts-expect-error
 			endsAt: { $ne: null, $gt: now },
-		});
+		}) as unknown as MongoDocument<Subscription>;
 
-		return subscription;
+		return this.convertFromMongoDocument(subscription);
 	}
 }

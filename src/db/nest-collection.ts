@@ -3,7 +3,7 @@ import { Collection, Db, FilterQuery, OptionalId } from 'mongodb';
 import Squawk from '../utils/squawk';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-type MongoDocument<T> = Omit<T, 'id'> & { _id: string };
+export type MongoDocument<T> = Omit<T, 'id'> & { _id: string };
 
 export default abstract class NestCollection<T extends Record<string, any>> {
 	protected collection: Collection<MongoDocument<T>>;

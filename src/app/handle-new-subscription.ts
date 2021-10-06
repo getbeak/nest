@@ -1,8 +1,9 @@
-import { SendEmailCommand } from '@aws-sdk/client-ses';
 import type { Stripe } from 'stripe';
+
 import { Context } from '../types';
 import Squawk from '../utils/squawk';
 import { getOrCreateUser } from './auth-authorization-code';
+import sendEmail from './send-email';
 
 export default async function handleNewSubscription(ctx: Context, stpSubscriptionId: string) {
 	const subscription = await ctx.app.stripeClient.subscriptions.retrieve(stpSubscriptionId);
@@ -24,17 +25,17 @@ export default async function handleNewSubscription(ctx: Context, stpSubscriptio
 
 	const userId = await getOrCreateUser(ctx, customer.email);
 
+	// Create stripe mapping
+	await ctx.app.dbClient.providerMappings.createOrUpdateMapping(userId, 'stripe', customer.id);
+
 	// const userId = await getOrCreateUser(ctx, 'test@google.com');
 
 	// Check if they already have a subscription
 	const activeSubscription = await ctx.app.dbClient.subscriptions.findActiveSubscription(userId);
 
 	// If they do, and have a subscription, handle and exit
-	if (Boolean(activeSubscription))
-		return await rejectSubscription(ctx, subscription.id, payment);
-
-	// Create stripe mapping
-	await ctx.app.dbClient.providerMappings.createMapping(userId, 'stripe', customer.id);
+	if (activeSubscription)
+		return await rejectSubscription(ctx, customer.email, subscription.id, payment);
 
 	// Create subscription
 	await ctx.app.dbClient.subscriptions.createSubscription(
@@ -45,22 +46,28 @@ export default async function handleNewSubscription(ctx: Context, stpSubscriptio
 		new Date(subscription.current_period_end * 1000).toISOString(),
 	);
 
+	const textBody = '';
+	const htmlBody = '';
+
 	// Send welcome email
-	// await ctx.app.sesClient.send(new SendEmailCommand({
-		
-	// }));
+	await sendEmail(ctx, 'Welcome to Beak!', customer.email, textBody, htmlBody);
+
+	return;
 }
 
-async function rejectSubscription(ctx: Context, subscriptionId: string, payment: Stripe.Response<Stripe.PaymentIntent>) {
+async function rejectSubscription(
+	ctx: Context,
+	emailAddress: string,
+	subscriptionId: string,
+	payment: Stripe.Response<Stripe.PaymentIntent>,
+) {
 	await Promise.all([
 		ctx.app.stripeClient.refunds.create({ payment_intent: payment.id, reason: 'duplicate' }),
 		ctx.app.stripeClient.subscriptions.del(subscriptionId, { invoice_now: false }),
 	]);
 
-	console.log({ refund: payment.amount });
+	const textBody = '';
+	const htmlBody = '';
 
-	// Send email
-	// await ctx.app.sesClient.send(new SendEmailCommand({
-
-	// }));
+	await sendEmail(ctx, 'Refund tings!', emailAddress, textBody, htmlBody);
 }

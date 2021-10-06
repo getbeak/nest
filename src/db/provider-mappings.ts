@@ -9,6 +9,7 @@ export interface ProviderMapping {
 	providerType: 'stripe';
 	providerValue: string;
 	createdAt: string;
+	updatedAt: string | null;
 	removedAt: string | null;
 }
 
@@ -25,18 +26,32 @@ export default class ProviderMappings extends Collection<ProviderMapping> {
 			providerValue: 1,
 			removedAt: 1,
 		});
+		await this.collection.createIndex({
+			providerType: 1,
+			providerValue: 1,
+			removedAt: { $eq: null },
+		}, { unique: true });
 	}
 
-	async createMapping(userId: string, providerType: 'stripe', providerValue: string) {
+	async createOrUpdateMapping(userId: string, providerType: 'stripe', providerValue: string) {
 		const id = ksuid.generate('provmap').toString();
+		const now = new Date().toISOString();
 
-		await this.collection.insertOne({
-			_id: id,
-			userId,
-			providerType,
-			providerValue,
-			createdAt: new Date().toISOString(),
-			removedAt: null,
+		// TODO(afr): Change this to upsert
+
+		await this.collection.updateOne({ _id: id }, {
+			$set: {
+				updatedAt: now,
+			},
+			$setOnInsert: {
+				_id: id,
+				userId,
+				providerType,
+				providerValue,
+				createdAt: now,
+				updatedAt: null,
+				removedAt: null,
+			},
 		});
 
 		return id;

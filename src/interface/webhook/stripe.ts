@@ -1,8 +1,8 @@
-import handleNewSubscription from '../../app/handle-new-subscription';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import Stripe from 'stripe';
-import { Logger } from 'tslog';
-import { App, Context } from '../../types';
+
+import handleNewSubscription from '../../app/handle-new-subscription';
+import { Context } from '../../types';
 import Squawk from '../../utils/squawk';
 
 export async function handleStripeWebhook(
@@ -22,17 +22,21 @@ export async function handleStripeWebhook(
 	}
 
 	switch (stpEvent.type) {
-		case 'customer.subscription.created':
+		case 'customer.subscription.created': {
 			const subscription = stpEvent.data.object as Record<string, string>;
 
-			await handleNewSubscription(ctx, subscription['id']);
+			await handleNewSubscription(ctx, subscription.id);
+			break;
+		}
+
+		case 'customer.subscription.updated':
+		case 'customer.subscription.deleted':
 			break;
 
+		// May be useful in the future
 		case 'charge.dispute.closed':
 		case 'charge.dispute.created':
-		case 'customer.subscription.deleted':
 		case 'customer.subscription.trial_will_end':
-		case 'customer.subscription.updated':
 		case 'payment_intent.canceled':
 		case 'payment_intent.created':
 		case 'payment_intent.payment_failed':

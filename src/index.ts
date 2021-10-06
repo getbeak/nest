@@ -72,6 +72,7 @@ const app = createApp(getConfig());
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyStructuredResultV2> => {
 	try {
 		let response;
+
 		await app.dbClient.connect();
 
 		if (rpc.qualifier(logger, app, event))

@@ -1,10 +1,10 @@
-import { SendEmailCommand } from '@aws-sdk/client-ses';
 import ksuid from '@cuvva/ksuid';
 import crypto from 'crypto';
 
 import { Context, SendMagicLinkRequest } from '../types';
 import Squawk from '../utils/squawk';
 import { getClient } from './clients';
+import sendEmail from './send-email';
 
 const expiry = 1200; // 20 minutes
 
@@ -61,28 +61,7 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 		`If the link above doesn't work try this: ${emailUrl}.`,
 	].join('<br />');
 
-	await ctx.app.sesClient.send(new SendEmailCommand({
-		Destination: {
-			ToAddresses: [request.identifierValue],
-		},
-		Source: 'Beak App <no-reply@getbeak.app>',
-		Message: {
-			Body: {
-				Text: {
-					Charset: 'UTF-8',
-					Data: emailText,
-				},
-				Html: {
-					Charset: 'UTF-8',
-					Data: emailHtml,
-				},
-			},
-			Subject: {
-				Charset: 'UTF-8',
-				Data: '🐦 Your Beak Magic Link!',
-			},
-		},
-	}));
+	await sendEmail(ctx, '🐦 Your Beak Magic Link!', request.identifierValue, emailText, emailHtml);
 
 	return null;
 }
