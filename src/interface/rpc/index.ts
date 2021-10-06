@@ -8,6 +8,7 @@ import Squawk from '../../utils/squawk';
 import authenticateUser, { authenticateUserSchema } from './authenticate-user';
 import enrolAlphaUser, { enrolAlphaUserSchema } from './enrol-alpha-user';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
+import getSubscriptionStatus20201214, { getSubscriptionStatusSchema20201214 } from './get-subscription-status-2020-12-14';
 import listNewsItems, { listNewsItemsSchema } from './list-news-items';
 import handleAuth from './middleware/auth';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
@@ -25,8 +26,8 @@ const v20201214: VersionSet = {
 		schema: authenticateUserSchema,
 	},
 	get_subscription_status: {
-		impl: getSubscriptionStatus,
-		schema: getSubscriptionStatusSchema,
+		impl: getSubscriptionStatus20201214,
+		schema: getSubscriptionStatusSchema20201214,
 	},
 	enrol_alpha_user: {
 		impl: enrolAlphaUser,
@@ -38,8 +39,17 @@ const v20201214: VersionSet = {
 	},
 };
 
+const v20211006: VersionSet = {
+	...v20201214,
+	get_subscription_status: {
+		impl: getSubscriptionStatus,
+		schema: getSubscriptionStatusSchema,
+	},
+};
+
 const versionSets: VersionSets = {
 	'2020-12-14': v20201214,
+	'2021-10-06': v20211006,
 };
 
 export function qualifier(_logger: Logger, _app: App, event: APIGatewayProxyEventV2): boolean {

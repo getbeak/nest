@@ -12,6 +12,7 @@ The API has no prefix, it goes straight to the version information.
 **Versions**:
 
 - `2020-12-14`: Initial version
+- `2021-10-06`: Updated `get_subscription_status` to support new subscription states
 
 ### `send_magic_link`
 
@@ -91,7 +92,7 @@ Authenticates a user upon receiving the magic link from above.
 
 ### `get_subscription_status`
 
-Effectively a heartbeat request to check the status of the user's subscription etc.
+Get's the current state of a user's subscription.
 
 #### Request
 
@@ -105,19 +106,9 @@ Effectively a heartbeat request to check the status of the user's subscription e
 
 ```json
 {
-	"subscription": "beak_alpha"
-}
-```
-
-### `enroll_alpha_user`
-
-Creates and enrolls a user in the Alpha.
-
-#### Request
-
-```json
-{
-	"email": "taylor.swift@gmail.com"
+	"state": "active",
+	"start_date": "2021-10-06T17:52:44.192Z",
+	"end_date": "2022-10-06T17:52:44.192Z"
 }
 ```
 
