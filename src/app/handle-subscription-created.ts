@@ -13,11 +13,7 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 		ctx.app.stripeClient.invoices.retrieve(subscription.latest_invoice as string),
 	]) as [Stripe.Response<Stripe.Customer>, Stripe.Response<Stripe.Invoice>];
 
-	const payment: Stripe.Response<Stripe.PaymentIntent> = await ctx.app.stripeClient.paymentIntents.retrieve(
-		invoice.payment_intent as string,
-	);
-
-	if (['active', 'incomplete'].includes(subscription.status)) {
+	if (!['active', 'incomplete'].includes(subscription.status)) {
 		// throw new Squawk('subscription_not_valid', { status: subscription.status });
 		return;
 	}
@@ -35,7 +31,7 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 
 	// If they do, and have a subscription, handle and exit
 	if (activeSubscription) {
-		await rejectSubscription(ctx, customer.email, subscription.id, payment);
+		await rejectSubscription(ctx, customer.email, subscription.id);
 
 		return;
 	}
@@ -61,11 +57,10 @@ async function rejectSubscription(
 	ctx: Context,
 	emailAddress: string,
 	subscriptionId: string,
-	payment: Stripe.Response<Stripe.PaymentIntent>,
 ) {
 	await Promise.all([
-		ctx.app.stripeClient.refunds.create({ payment_intent: payment.id, reason: 'duplicate' }),
-		ctx.app.stripeClient.subscriptions.del(subscriptionId, { invoice_now: false }),
+		// ctx.app.stripeClient.refunds.create({ payment_intent: payment.id, reason: 'duplicate' }),
+		ctx.app.stripeClient.subscriptions.del(subscriptionId, { prorate: true, invoice_now: true }),
 	]);
 
 	const textBody = '';
