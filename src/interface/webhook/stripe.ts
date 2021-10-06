@@ -1,7 +1,8 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import Stripe from 'stripe';
 
-import handleNewSubscription from '../../app/handle-new-subscription';
+import handleSubscriptionCreated from '../../app/handle-subscription-created';
+import handleSubscriptionUpdate from '../../app/handle-subscription-update';
 import { Context } from '../../types';
 import Squawk from '../../utils/squawk';
 
@@ -25,13 +26,17 @@ export async function handleStripeWebhook(
 		case 'customer.subscription.created': {
 			const subscription = stpEvent.data.object as Record<string, string>;
 
-			await handleNewSubscription(ctx, subscription.id);
+			await handleSubscriptionCreated(ctx, subscription.id);
 			break;
 		}
 
 		case 'customer.subscription.updated':
-		case 'customer.subscription.deleted':
+		case 'customer.subscription.deleted': {
+			const subscription = stpEvent.data.object as Record<string, string>;
+
+			await handleSubscriptionUpdate(ctx, subscription.id);
 			break;
+		}
 
 		// May be useful in the future
 		case 'charge.dispute.closed':

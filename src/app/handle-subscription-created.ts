@@ -5,7 +5,7 @@ import Squawk from '../utils/squawk';
 import { getOrCreateUser } from './auth-authorization-code';
 import sendEmail from './send-email';
 
-export default async function handleNewSubscription(ctx: Context, stpSubscriptionId: string) {
+export default async function handleSubscriptionCreated(ctx: Context, stpSubscriptionId: string) {
 	const subscription = await ctx.app.stripeClient.subscriptions.retrieve(stpSubscriptionId);
 
 	const [customer, invoice] = await Promise.all([
@@ -17,8 +17,10 @@ export default async function handleNewSubscription(ctx: Context, stpSubscriptio
 		invoice.payment_intent as string,
 	);
 
-	if (subscription.status !== 'active')
-		throw new Squawk('subscription_not_active');
+	if (['active', 'incomplete'].includes(subscription.status)) {
+		// throw new Squawk('subscription_not_valid', { status: subscription.status });
+		return;
+	}
 
 	if (!customer.email)
 		throw new Squawk('customer_email_missing');
@@ -28,22 +30,24 @@ export default async function handleNewSubscription(ctx: Context, stpSubscriptio
 	// Create stripe mapping
 	await ctx.app.dbClient.providerMappings.createOrUpdateMapping(userId, 'stripe', customer.id);
 
-	// const userId = await getOrCreateUser(ctx, 'test@google.com');
-
 	// Check if they already have a subscription
 	const activeSubscription = await ctx.app.dbClient.subscriptions.findActiveSubscription(userId);
 
 	// If they do, and have a subscription, handle and exit
-	if (activeSubscription)
-		return await rejectSubscription(ctx, customer.email, subscription.id, payment);
+	if (activeSubscription) {
+		await rejectSubscription(ctx, customer.email, subscription.id, payment);
 
-	// Create subscription
+		return;
+	}
+
+	// Set subscription information
 	await ctx.app.dbClient.subscriptions.createSubscription(
 		userId,
 		subscription.items.data[0].plan.product as string,
 		subscription.id,
 		new Date(subscription.current_period_start * 1000).toISOString(),
 		new Date(subscription.current_period_end * 1000).toISOString(),
+		subscription.status,
 	);
 
 	const textBody = '';
@@ -51,8 +55,6 @@ export default async function handleNewSubscription(ctx: Context, stpSubscriptio
 
 	// Send welcome email
 	await sendEmail(ctx, 'Welcome to Beak!', customer.email, textBody, htmlBody);
-
-	return;
 }
 
 async function rejectSubscription(

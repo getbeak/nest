@@ -10,6 +10,6 @@ export default async function getSubscriptionStatus(ctx: Context, request: GetSu
 	return {
 		startDate: subscription.startsAt,
 		endDate: subscription.endsAt,
-		status: 'active',
+		status: ['active', 'incomplete'].includes(subscription.status),
 	};
 }
