@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   package:
     name: Package, bundle, and upload
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
