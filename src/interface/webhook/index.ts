@@ -17,6 +17,11 @@ export const runner = async (
 	app: App,
 	event: APIGatewayProxyEventV2,
 ): Promise<Record<string, unknown> | null> => {
+	const method = event.requestContext.http.method.toUpperCase();
+
+	if (!method || method !== 'POST')
+		throw new Squawk('method_not_supported');
+
 	const { webhookProvider } = parsePath(event.rawPath);
 	const ctx: Context = {
 		app,
