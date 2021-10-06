@@ -1,5 +1,5 @@
-import { Db } from 'mongodb';
 import ksuid from '@cuvva/ksuid';
+import { Db } from 'mongodb';
 
 import Collection from './nest-collection';
 
@@ -9,7 +9,7 @@ export interface ProviderMapping {
 	providerType: 'stripe';
 	providerValue: string;
 	createdAt: string;
-	updatedAt: string | null;
+	updatedAt: string;
 	removedAt: string | null;
 }
 
@@ -37,9 +37,11 @@ export default class ProviderMappings extends Collection<ProviderMapping> {
 		const id = ksuid.generate('provmap').toString();
 		const now = new Date().toISOString();
 
-		// TODO(afr): Change this to upsert
-
-		await this.collection.updateOne({ _id: id }, {
+		await this.collection.updateOne({
+			userId,
+			providerType,
+			providerValue,
+		}, {
 			$set: {
 				updatedAt: now,
 			},
@@ -49,10 +51,9 @@ export default class ProviderMappings extends Collection<ProviderMapping> {
 				providerType,
 				providerValue,
 				createdAt: now,
-				updatedAt: null,
 				removedAt: null,
 			},
-		});
+		}, { upsert: true });
 
 		return id;
 	}

@@ -55,6 +55,9 @@ export default class Subscriptions extends Collection<Subscription> {
 			endsAt: { $ne: null, $gt: now },
 		}) as unknown as MongoDocument<Subscription>;
 
+		if (subscription === null)
+			return null;
+
 		return this.convertFromMongoDocument(subscription);
 	}
 }
