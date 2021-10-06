@@ -16,9 +16,9 @@ export interface Subscription {
 }
 
 export interface SubscriptionDelta {
-	startsAt: string;
-	endsAt: string;
-	status: string;
+	startsAt?: string;
+	endsAt?: string;
+	status?: string;
 }
 
 export default class Subscriptions extends Collection<Subscription> {
@@ -55,8 +55,10 @@ export default class Subscriptions extends Collection<Subscription> {
 
 	async updateSubscription(id: string, delta: SubscriptionDelta) {
 		await this.collection.updateOne({ _id: id }, {
-			...delta,
-			updatedAt: new Date().toISOString(),
+			$set: {
+				...delta,
+				updatedAt: new Date().toISOString(),
+			},
 		});
 	}
 
