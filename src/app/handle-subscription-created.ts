@@ -7,16 +7,16 @@ import sendEmail from './send-email';
 
 export default async function handleSubscriptionCreated(ctx: Context, stpSubscriptionId: string) {
 	const subscription = await ctx.app.stripeClient.subscriptions.retrieve(stpSubscriptionId);
-
-	const [customer, invoice] = await Promise.all([
-		ctx.app.stripeClient.customers.retrieve(subscription.customer as string),
-		ctx.app.stripeClient.invoices.retrieve(subscription.latest_invoice as string),
-	]) as [Stripe.Response<Stripe.Customer>, Stripe.Response<Stripe.Invoice>];
+	const customer = await ctx.app.stripeClient.customers.retrieve(subscription.customer as string) as Stripe.Response<Stripe.Customer>;
 
 	if (!['active', 'incomplete'].includes(subscription.status)) {
 		// throw new Squawk('subscription_not_valid', { status: subscription.status });
 		return;
 	}
+
+	// If we're not on prod, ensure that the correct coupon was used to create the subscription
+	if (requiredCouponCheck(ctx, subscription))
+		return;
 
 	if (!customer.email)
 		throw new Squawk('customer_email_missing');
@@ -27,10 +27,8 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	await ctx.app.dbClient.providerMappings.createOrUpdateMapping(userId, 'stripe', customer.id);
 
 	// Check if they already have a subscription
-	const activeSubscription = await ctx.app.dbClient.subscriptions.findActiveSubscription(userId);
-
-	// If they do, and have a subscription, handle and exit
-	if (activeSubscription) {
+	// If they do, cancel, refund, and inform
+	if (await ctx.app.dbClient.subscriptions.findActiveSubscription(userId)) {
 		await rejectSubscription(ctx, customer.email, subscription.id);
 
 		return;
@@ -53,11 +51,17 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	await sendEmail(ctx, 'Welcome to Beak!', customer.email, textBody, htmlBody);
 }
 
-async function rejectSubscription(
-	ctx: Context,
-	emailAddress: string,
-	subscriptionId: string,
-) {
+function requiredCouponCheck(ctx: Context, subscription: Stripe.Response<Stripe.Subscription>) {
+	if (ctx.app.config.env === 'prod')
+		return true;
+
+	if (!subscription.discount || !ctx.app.config.requiredCoupon)
+		return false;
+	
+	return subscription.discount.coupon.id === ctx.app.config.requiredCoupon;
+}
+
+async function rejectSubscription(ctx: Context, emailAddress: string, subscriptionId: string) {
 	await Promise.all([
 		// ctx.app.stripeClient.refunds.create({ payment_intent: payment.id, reason: 'duplicate' }),
 		ctx.app.stripeClient.subscriptions.del(subscriptionId, { prorate: true, invoice_now: true }),

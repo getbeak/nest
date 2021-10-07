@@ -60,6 +60,7 @@ function getConfig(): Config {
 		jwtPrivateKey,
 		jwtPublicKey,
 		internalKey,
+		requiredCoupon: process.env.REQUIRED_COUPON_ID ?? void 0,
 		mongoUri: process.env.MONGO_URI ?? 'mongodb://localhost/local-nest-beak',
 		stpSecretKey,
 		stpWebhookSecret,
