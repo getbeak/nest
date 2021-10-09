@@ -80,7 +80,7 @@ export async function getOrCreateUser(ctx: Context, identifierValue: string) {
 
 	const userId = await ctx.app.dbClient.users.createUser();
 
-	await ctx.app.dbClient.identifiers.createIdentifier(identifierValue, 'email', userId, true);
+	await ctx.app.dbClient.identifiers.createIdentifier(identifierValue, 'email', userId, false);
 
 	return userId;
 }

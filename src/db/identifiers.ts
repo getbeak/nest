@@ -11,7 +11,7 @@ export interface Identifier {
 	identifierValue: string;
 	createdAt: string;
 	updatedAt: string | null;
-	verifiedAt: string;
+	verifiedAt: string | null;
 	removedAt: string | null;
 }
 
@@ -34,7 +34,7 @@ export default class Identifiers extends Collection<Identifier> {
 		]);
 	}
 
-	async createIdentifier(identifierValue: string, identifierType: 'email', userId: string, verified: true) {
+	async createIdentifier(identifierValue: string, identifierType: 'email', userId: string, verified: boolean) {
 		const id = ksuid.generate('userident').toString();
 		const now = new Date().toISOString();
 
@@ -45,9 +45,9 @@ export default class Identifiers extends Collection<Identifier> {
 			userId,
 			createdAt: now,
 			updatedAt: null,
-			verifiedAt: now,
+			verifiedAt: verified ? now : null,
 			removedAt: null,
-		})
+		});
 	}
 
 	async setIdentifierAsVerified(id: string) {
@@ -55,7 +55,7 @@ export default class Identifiers extends Collection<Identifier> {
 			$set: {
 				verifiedAt: new Date().toISOString(),
 			},
-		})
+		});
 	}
 
 	async findActiveEmailIdentifier(email: string) {
@@ -73,7 +73,7 @@ export default class Identifiers extends Collection<Identifier> {
 	async findActiveEmailIdentifierByUser(userId: string) {
 		const identifier = await this.collection.findOne({
 			identifierType: 'email',
-			userId: userId,
+			userId,
 		});
 
 		if (!identifier)
