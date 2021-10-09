@@ -15,7 +15,7 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	}
 
 	// If we're not on prod, ensure that the correct coupon was used to create the subscription
-	if (requiredCouponCheck(ctx, subscription))
+	if (couponRequirementCheck(ctx, subscription))
 		return;
 
 	if (!customer.email)
@@ -39,6 +39,7 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 		userId,
 		subscription.items.data[0].plan.product as string,
 		subscription.id,
+		customer.id,
 		new Date(subscription.current_period_start * 1000).toISOString(),
 		new Date(subscription.current_period_end * 1000).toISOString(),
 		subscription.status,
@@ -51,13 +52,13 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	await sendEmail(ctx, 'Welcome to Beak!', customer.email, textBody, htmlBody);
 }
 
-function requiredCouponCheck(ctx: Context, subscription: Stripe.Response<Stripe.Subscription>) {
+function couponRequirementCheck(ctx: Context, subscription: Stripe.Response<Stripe.Subscription>) {
 	if (ctx.app.config.env === 'prod')
 		return true;
 
 	if (!subscription.discount || !ctx.app.config.requiredCoupon)
 		return false;
-	
+
 	return subscription.discount.coupon.id === ctx.app.config.requiredCoupon;
 }
 

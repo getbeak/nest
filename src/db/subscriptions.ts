@@ -8,6 +8,7 @@ export interface Subscription {
 	userId: string;
 	stpProductId: string;
 	stpSubscriptionId: string;
+	stpCustomerId: string;
 	startsAt: string;
 	endsAt: string;
 	status: string;
@@ -34,6 +35,7 @@ export default class Subscriptions extends Collection<Subscription> {
 		userId: string,
 		stpProductId: string,
 		stpSubscriptionId: string,
+		stpCustomerId: string,
 		startsAt: string,
 		endsAt: string,
 		status: string,
@@ -45,6 +47,7 @@ export default class Subscriptions extends Collection<Subscription> {
 			userId,
 			stpProductId,
 			stpSubscriptionId,
+			stpCustomerId,
 			startsAt,
 			endsAt,
 			status,

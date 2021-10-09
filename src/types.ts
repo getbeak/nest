@@ -111,7 +111,10 @@ export interface GetSubscriptionStatusRequest {
 }
 
 export interface GetSubscriptionStatusResponse {
-	subscription: 'beak_alpha';
+	status: string;
+	billingPortalUrl: string | null;
+	startDate: string;
+	endDate: string | null;
 }
 
 export interface EnrolAlphaUserRequest {

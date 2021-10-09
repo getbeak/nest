@@ -106,11 +106,14 @@ Get's the current state of a user's subscription.
 
 ```json
 {
-	"state": "active",
+	"status": "active",
+	"billing_portal_url": "https://billing.stripe.com/xxx",
 	"start_date": "2021-10-06T17:52:44.192Z",
 	"end_date": "2022-10-06T17:52:44.192Z"
 }
 ```
+
+`billing_portal_url` can be `null` if there are issues connecting to Stripe.
 
 ### `list_news_items`
 
@@ -265,6 +268,7 @@ interface Subscriptions {
 	userId: string;
 	stpProductId: string;
 	stpSubscriptionId: string;
+	stpCustomerId: string;
 	startsAt: string;
 	endsAt: string;
 	createdAt: string;

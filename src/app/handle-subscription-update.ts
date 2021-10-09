@@ -1,7 +1,7 @@
 import { Context } from '../types';
 import Squawk from '../utils/squawk';
 
-export default async function handleNewSubscription(ctx: Context, stpSubscriptionId: string) {
+export default async function handleSubscriptionUpdate(ctx: Context, stpSubscriptionId: string) {
 	const stpSubscription = await ctx.app.stripeClient.subscriptions.retrieve(stpSubscriptionId);
 	const subscription = await ctx.app.dbClient.subscriptions.findByStripeId(stpSubscription.id);
 
