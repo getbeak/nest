@@ -4,6 +4,7 @@ import type {
 } from 'aws-lambda';
 import snakeCaseKeys from 'snakecase-keys';
 import { Logger } from 'tslog';
+import ksuid from '@cuvva/ksuid';
 
 import createApp from './app';
 import * as rpc from './interface/rpc';
@@ -31,6 +32,8 @@ H+xi7glE9uUzfomYiJVzbQyvL8CwouqM2xpfowpIdrIWq5NFJxRLEOOWpQRK3bXW
 function getConfig(): Config {
 	const env = process.env.APP_ENV ?? 'local';
 	const internalKey = process.env.INTERNAL_KEY ?? 'test';
+
+	ksuid.environment = env;
 
 	const [jwtPrivateKey, jwtPublicKey] = (function readJwtEnv() {
 		const jwtKeys = process.env.JWT_KEYS;
