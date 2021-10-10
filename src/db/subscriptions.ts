@@ -81,6 +81,7 @@ export default class Subscriptions extends Collection<Subscription> {
 
 		const subscription = await this.collection.findOne({
 			userId,
+			status: { $in: ['active', 'incomplete'] },
 			// @ts-expect-error
 			endsAt: { $ne: null, $gt: now },
 		}) as unknown as MongoDocument<Subscription>;
