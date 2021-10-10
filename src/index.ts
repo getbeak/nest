@@ -1,10 +1,10 @@
+import ksuid from '@cuvva/ksuid';
 import type {
 	APIGatewayProxyEventV2,
 	APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
 import snakeCaseKeys from 'snakecase-keys';
 import { Logger } from 'tslog';
-import ksuid from '@cuvva/ksuid';
 
 import createApp from './app';
 import * as rpc from './interface/rpc';
