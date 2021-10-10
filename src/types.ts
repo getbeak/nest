@@ -1,4 +1,5 @@
 import { SESClient } from '@aws-sdk/client-ses';
+import { CancelType } from 'db/subscriptions';
 import { Stripe } from 'stripe';
 import { Logger } from 'tslog';
 
@@ -115,6 +116,9 @@ export interface GetSubscriptionStatusResponse {
 	billingPortalUrl: string | null;
 	startDate: string;
 	endDate: string | null;
+	cancelAt: string | null;
+	cancelType: CancelType | null;
+	cancelledAt: string | null;
 }
 
 export interface GetUserRequest {

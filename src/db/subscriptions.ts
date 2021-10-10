@@ -3,6 +3,8 @@ import { Db } from 'mongodb';
 
 import Collection, { MongoDocument } from './nest-collection';
 
+export type CancelType = 'immediate' | 'period_end';
+
 export interface Subscription {
 	id: string;
 	userId: string;
@@ -12,14 +14,20 @@ export interface Subscription {
 	startsAt: string;
 	endsAt: string;
 	status: string;
+	cancelAt: string | null;
+	cancelType: CancelType | null;
 	createdAt: string;
 	updatedAt: string | null;
+	cancelledAt: string | null;
 }
 
 export interface SubscriptionDelta {
 	startsAt?: string;
 	endsAt?: string;
 	status?: string;
+	cancelAt?: string | null;
+	cancelType?: CancelType | null;
+	cancelledAt?: string | null;
 }
 
 export default class Subscriptions extends Collection<Subscription> {
@@ -50,9 +58,12 @@ export default class Subscriptions extends Collection<Subscription> {
 			stpCustomerId,
 			startsAt,
 			endsAt,
+			cancelAt: null,
 			status,
 			createdAt: now,
 			updatedAt: null,
+			cancelledAt: null,
+			cancelType: null,
 		});
 	}
 

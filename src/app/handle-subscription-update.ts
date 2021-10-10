@@ -1,3 +1,6 @@
+import { CancelType } from 'db/subscriptions';
+import Stripe from 'stripe';
+
 import { Context } from '../types';
 import Squawk from '../utils/squawk';
 
@@ -12,12 +15,32 @@ export default async function handleSubscriptionUpdate(ctx: Context, stpSubscrip
 	await ctx.app.dbClient.subscriptions.updateSubscription(
 		subscription.id,
 		{
-			startsAt: new Date(stpSubscription.current_period_start * 1000).toISOString(),
-			endsAt: new Date(stpSubscription.current_period_end * 1000).toISOString(),
+			startsAt: stpDateToIso(stpSubscription.current_period_start)!,
+			endsAt: stpDateToIso(stpSubscription.current_period_end)!,
 			status: stpSubscription.status,
+			cancelledAt: stpDateToIso(stpSubscription.canceled_at),
+			cancelAt: stpDateToIso(stpSubscription.cancel_at),
+			cancelType: getCancelType(stpSubscription),
 		},
 	);
 
 	// Send email if subscription has ended?
 	// await sendEmail(ctx, 'Welcome to Beak!', customer.email, textBody, htmlBody);
+}
+
+function stpDateToIso(date: number | null) {
+	if (date === null)
+		return null;
+
+	return new Date(date * 1000).toISOString();
+}
+
+function getCancelType(sub: Stripe.Response<Stripe.Subscription>): CancelType | null {
+	if (!sub.canceled_at)
+		return null;
+
+	if (sub.cancel_at_period_end)
+		return 'period_end';
+
+	return 'immediate';
 }
