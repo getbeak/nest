@@ -42,5 +42,9 @@ async function revokeAccessTokens(ctx: Context, userId: string, clientId: string
 async function revokeAuthorizations(ctx: Context, userId: string, clientId: string) {
 	const identifier = await ctx.app.dbClient.identifiers.findActiveEmailIdentifierByUser(userId);
 
-	await ctx.app.dbClient.authorizations.setManyAsRevoked(identifier.identifierType, identifier.identifierValue, clientId);
+	await ctx.app.dbClient.authorizations.setManyAsRevoked(
+		identifier.identifierType,
+		identifier.identifierValue,
+		clientId,
+	);
 }
