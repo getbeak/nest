@@ -35,12 +35,7 @@ export default class Squawk extends Error {
 		if (Squawk.isSquawk(error))
 			return error as Squawk;
 
-		let newError: Squawk;
-
-		if (error instanceof Error)
-			newError = new Squawk('unknown', error.message ? { message: error.message } : void 0);
-		else
-			newError = new Squawk('unknown', error ? { error } : void 0);
+		const newError = new Squawk('unknown', error ? { error } : void 0);
 
 		if (error instanceof Error)
 			defineNonSerializable(newError, 'stack', error.stack);
@@ -49,7 +44,7 @@ export default class Squawk extends Error {
 	}
 }
 
-function defineNonSerializable(obj: any, property: string, value: any) {
+function defineNonSerializable(obj: unknown, property: string, value: unknown) {
 	Object.defineProperty(obj, property, {
 		value,
 		writable: false,
