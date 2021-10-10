@@ -7,7 +7,7 @@ const newsItems: NewsItem[] = [{
 		dismissible: false,
 		payload: {
 			emoji: '🐦',
-			title: 'Welcome to the Beak!',
+			title: 'We\'re almost there',
 			body: 'We\'re almost ready to go! If you have any feedback please either use the form below or email info@getbeak.app 🚀',
 			action: {
 				cta: 'View feedback form',
