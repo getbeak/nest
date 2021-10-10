@@ -1,6 +1,7 @@
 import ksuid from '@cuvva/ksuid';
 import { Db } from 'mongodb';
 
+import Squawk from '../utils/squawk';
 import Collection from './nest-collection';
 
 export interface User {
@@ -24,5 +25,14 @@ export default class Users extends Collection<User> {
 		});
 
 		return id;
+	}
+
+	async findUser(id: string) {
+		const user = await this.collection.findOne({ _id: id });
+
+		if (user === null)
+			throw new Squawk('not_found');
+
+		return this.convertFromMongoDocument(user);
 	}
 }

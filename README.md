@@ -115,6 +115,36 @@ Get's the current state of a user's subscription.
 
 `billing_portal_url` can be `null` if there are issues connecting to Stripe.
 
+### `get_user`
+
+Get's information about the user.
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C2kg4d9HyP1Bg09HBF4Bm40"
+}
+```
+
+#### Response
+
+```json
+{
+	"id": "user_000000C2kg4d9HyP1Bg09HBF4Bm40",
+	"created_at": "2021-10-09T16:00:15.844Z",
+	"identifiers": [{
+		"id": "userident_000000C2kg4d9HyP1Bg09HBF4Bm42",
+		"identifier_type": "email",
+		"identifier_value": "taylor.swift@getbeak.app",
+		"created_at": "2021-10-10T15:49:58.931Z",
+		"updated_at": "2021-10-10T15:49:58.931Z",
+		"verified_at": "2021-10-10T15:49:58.931Z",
+		"removed_at": null
+	}]
+}
+```
+
 ### `list_news_items`
 
 Lists the currently available news items for a client.

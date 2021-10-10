@@ -9,6 +9,7 @@ import authenticateUser, { authenticateUserSchema } from './authenticate-user';
 import enrolAlphaUser, { enrolAlphaUserSchema } from './enrol-alpha-user';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
 import getSubscriptionStatus20201214, { getSubscriptionStatusSchema20201214 } from './get-subscription-status-2020-12-14';
+import getUser, { getUserSchema } from './get-user';
 import listNewsItems, { listNewsItemsSchema } from './list-news-items';
 import handleAuth from './middleware/auth';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
@@ -44,6 +45,10 @@ const v20211006: VersionSet = {
 	get_subscription_status: {
 		impl: getSubscriptionStatus,
 		schema: getSubscriptionStatusSchema,
+	},
+	get_user: {
+		impl: getUser,
+		schema: getUserSchema,
 	},
 };
 
@@ -94,6 +99,7 @@ export const runner = async (
 		},
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let request: any = null;
 
 	if (event.body === void 0 && schema !== void 0)

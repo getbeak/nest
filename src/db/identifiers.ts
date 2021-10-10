@@ -1,7 +1,7 @@
 import ksuid from '@cuvva/ksuid';
 import { Db } from 'mongodb';
-import Squawk from '../utils/squawk';
 
+import Squawk from '../utils/squawk';
 import Collection from './nest-collection';
 
 export interface Identifier {
@@ -80,5 +80,11 @@ export default class Identifiers extends Collection<Identifier> {
 			throw new Squawk('not_found');
 
 		return this.convertFromMongoDocument(identifier);
+	}
+
+	async listUserIdentifiers(userId: string) {
+		const identifiers = await this.collection.find({ userId }).toArray();
+
+		return identifiers.map(this.convertFromMongoDocument);
 	}
 }
