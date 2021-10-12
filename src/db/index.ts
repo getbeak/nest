@@ -29,6 +29,7 @@ export default class DbClient {
 
 	async connect() {
 		await this.client.connect();
+
 		this.db = this.client.db('nest');
 
 		this.authorizations = new Authorizations(this.db);
@@ -38,6 +39,8 @@ export default class DbClient {
 		this.refreshTokens = new RefreshTokens(this.db);
 		this.subscriptions = new Subscriptions(this.db);
 		this.users = new Users(this.db);
+
+		await this.setupIndexes();
 	}
 
 	async setupIndexes() {

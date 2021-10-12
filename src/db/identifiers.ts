@@ -21,17 +21,13 @@ export default class Identifiers extends Collection<Identifier> {
 	}
 
 	async setupIndexes() {
-		await Promise.all([
-			this.collection.createIndex({
-				identifierType: 1,
-				identifierValue: 1,
-			}),
-			this.collection.createIndex({
-				identifierType: 1,
-				identifierValue: 1,
-				removedAt: { $eq: null },
-			}, { unique: true }),
-		]);
+		await this.collection.createIndex({
+			identifierType: 1,
+			identifierValue: 1,
+		}, {
+			unique: true,
+			partialFilterExpression: { removedAt: { $eq: null } },
+		});
 	}
 
 	async createIdentifier(identifierValue: string, identifierType: 'email', userId: string, verified: boolean) {

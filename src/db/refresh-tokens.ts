@@ -19,7 +19,6 @@ export default class RefreshTokens extends Collection<RefreshToken> {
 		await Promise.all([
 			this.collection.createIndex({ clientId: 1, userId: 1 }),
 			this.collection.createIndex({ expiresAt: 1 }, { sparse: true, expireAfterSeconds: ttl }),
-			this.collection.createIndex({ revokedAt: 1, usedAt: 1 }, { sparse: true, expireAfterSeconds: ttl }),
 		]);
 	}
 

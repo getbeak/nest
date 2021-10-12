@@ -15,7 +15,7 @@ export interface ProviderMapping {
 
 export default class ProviderMappings extends Collection<ProviderMapping> {
 	constructor(db: Db) {
-		super(db, 'provider_mappings');
+		super(db, 'provider-mappings');
 	}
 
 	async setupIndexes() {
@@ -29,8 +29,10 @@ export default class ProviderMappings extends Collection<ProviderMapping> {
 		await this.collection.createIndex({
 			providerType: 1,
 			providerValue: 1,
-			removedAt: { $eq: null },
-		}, { unique: true });
+		}, {
+			unique: true,
+			partialFilterExpression: { removedAt: { $eq: null } },
+		});
 	}
 
 	async createOrUpdateMapping(userId: string, providerType: 'stripe', providerValue: string) {
