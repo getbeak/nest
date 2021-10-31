@@ -1,4 +1,4 @@
-import { Collection, Db, FilterQuery, OptionalId } from 'mongodb';
+import { Collection, Db, OptionalId } from 'mongodb';
 
 import Squawk from '../utils/squawk';
 
@@ -18,14 +18,15 @@ export default abstract class NestCollection<T extends Record<string, any>> {
 
 	async createOne(item: T) {
 		const mongoItem = this.convertToMongoDocument(item);
-		const insert = await this.collection.insertOne(mongoItem as OptionalId<MongoDocument<T>>);
 
-		return this.convertFromMongoDocument(insert.ops[0] as MongoDocument<T>);
+		await this.collection.insertOne(mongoItem as OptionalId<MongoDocument<T>>);
+
+		return this.convertFromMongoDocument(mongoItem);
 	}
 
 	async findById(id: string) {
 		const object = await this.collection
-			.find({ _id: id } as FilterQuery<MongoDocument<T>>)
+			.find({ _id: id } as MongoDocument<T>)
 			.limit(1)
 			.next();
 

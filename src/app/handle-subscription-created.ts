@@ -64,7 +64,6 @@ function notEligibleOrPassedCouponRequirement(ctx: Context, subscription: Stripe
 
 async function rejectSubscription(ctx: Context, emailAddress: string, subscriptionId: string) {
 	await Promise.all([
-		// ctx.app.stripeClient.refunds.create({ payment_intent: payment.id, reason: 'duplicate' }),
 		ctx.app.stripeClient.subscriptions.del(subscriptionId, { prorate: true, invoice_now: true }),
 	]);
 

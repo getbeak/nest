@@ -9,7 +9,7 @@ export default function createApp(config: Config): App {
 		config,
 
 		dbClient: new DbClient(config.mongoUri),
-		sesClient: new SESClient('eu-west-2'),
+		sesClient: new SESClient({ region: 'eu-west-2' }),
 		stripeClient: new Stripe(config.stpSecretKey, {
 			typescript: true,
 			apiVersion: '2020-08-27',

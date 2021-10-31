@@ -1,4 +1,4 @@
-import { Db, FilterQuery } from 'mongodb';
+import { Db } from 'mongodb';
 
 import { AccessToken } from './access-tokens';
 import Collection from './nest-collection';
@@ -23,7 +23,7 @@ export default class RefreshTokens extends Collection<RefreshToken> {
 	}
 
 	async setAsUsed(id: string) {
-		await this.collection.updateOne({ _id: id } as FilterQuery<RefreshToken>, {
+		await this.collection.updateOne({ _id: id }, {
 			$set: { usedAt: new Date().toISOString() },
 		});
 	}
@@ -34,7 +34,7 @@ export default class RefreshTokens extends Collection<RefreshToken> {
 			clientId,
 			usedAt: null,
 			revokedAt: null,
-		} as FilterQuery<RefreshToken>, {
+		}, {
 			$set: { revokedAt: new Date().toISOString() },
 		});
 	}

@@ -1,4 +1,4 @@
-import { Db, FilterQuery } from 'mongodb';
+import { Db } from 'mongodb';
 
 import Collection from './nest-collection';
 
@@ -31,7 +31,7 @@ export default class Authorizations extends Collection<AuthorizationCode> {
 	}
 
 	async setAsUsed(id: string) {
-		await this.collection.updateOne({ _id: id } as FilterQuery<AuthorizationCode>, {
+		await this.collection.updateOne({ _id: id }, {
 			$set: { usedAt: new Date().toISOString() },
 		});
 	}
@@ -43,7 +43,7 @@ export default class Authorizations extends Collection<AuthorizationCode> {
 			identifierValue: value,
 			usedAt: null,
 			revokedAt: null,
-		} as FilterQuery<AuthorizationCode>, {
+		}, {
 			$set: { revokedAt: new Date().toISOString() },
 		});
 	}

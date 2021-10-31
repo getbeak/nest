@@ -1,4 +1,4 @@
-import { Db, FilterQuery } from 'mongodb';
+import { Db } from 'mongodb';
 
 import { Grant } from '../types';
 import Collection from './nest-collection';
@@ -31,14 +31,12 @@ export default class AccessTokens extends Collection<AccessToken> {
 	}
 
 	async findAllActive(userId: string, clientId: string) {
-		const filter: FilterQuery<AccessToken> = {
+		const items = await this.collection.find({
 			revokedAt: null,
 			expiresAt: { $gt: new Date().toISOString() },
 			userId,
 			clientId,
-		};
-
-		const items = await this.collection.find(filter).toArray();
+		}).toArray();
 
 		return items.map(this.convertFromMongoDocument);
 	}
@@ -47,7 +45,7 @@ export default class AccessTokens extends Collection<AccessToken> {
 		await this.collection.updateMany({
 			_id: { $in: ids },
 			revokedAt: null,
-		} as FilterQuery<AccessToken>, {
+		}, {
 			$set: {
 				revokedAt: new Date().toISOString(),
 			},
