@@ -17,32 +17,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2-beta
         with:
-          node-version: '14'
-
-      - name: Cache dependencies
-        uses: actions/cache@v2.1.4
-        with:
-          path: node_modules/
-          key: v1-yarn-cache-${{ hashFiles('yarn.lock') }} }}
-          restore-keys: |
-            v1-yarn-cache-
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: yarn.lock
 
       - name: Install modules
         run: yarn install --frozen-lockfile
 
       - name: Build, package, bundle, and clear
         env:
-          BUILD_ENVIRONMENT: ci
+          BUILD_ENVIRONMENT: cit
           COMMIT_IDENTIFIER: ${{ github.sha }}
         run: yarn bundle:release
 
-      - name: Prepare artifact for S3
-        run: |
-            mkdir release
-            cp bundle.zip release/${{ github.sha }}.zip
-
       - name: Upload artifact to S3
         env:
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: aws s3 cp bundle.zip s3://${{ secrets.AWS_S3_LAMBDA_BUCKET }}/commits/${{ github.sha }}.zip
