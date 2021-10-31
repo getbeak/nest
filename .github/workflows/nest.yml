@@ -41,11 +41,8 @@ jobs:
             mkdir release
             cp bundle.zip release/${{ github.sha }}.zip
 
-      - name: Upload bundled artifact to S3
-        uses: shallwefootball/upload-s3-action@v1.1.2
+      - name: Upload artifact to S3
         with:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ secrets.AWS_S3_LAMBDA_BUCKET }}
-          source_dir: 'release/'
-          destination_dir: 'commits/'
+        run: aws s3 cp bundle.zip s3://${{ secrets.AWS_S3_LAMBDA_BUCKET }}/commits/${{ github.sha }}.zip
