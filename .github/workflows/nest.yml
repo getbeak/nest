@@ -42,7 +42,7 @@ jobs:
             cp bundle.zip release/${{ github.sha }}.zip
 
       - name: Upload artifact to S3
-        with:
+        env:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: aws s3 cp bundle.zip s3://${{ secrets.AWS_S3_LAMBDA_BUCKET }}/commits/${{ github.sha }}.zip
