@@ -1,0 +1,7 @@
+Duplicate subscription
+
+You can only have one active Beak subscription. We've cancelled (and fully refunded) the latest subscription you purchased. The existing subscription you have is unaffected and you can sign into Beak with this email address to use it.
+
+You will also recieve an email from Stripe with your refund invoice detailing when the refund will be processed. If you have any questions please feel free to reach out by email (info@getbeak.app), or Twitter @getbeak.
+
+~ The Beak flock 🐦

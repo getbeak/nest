@@ -1,0 +1,7 @@
+🐦 Your Beak magic link is below. Click or paste it into your browser to get going!
+
+{{emailUrl}}
+
+~ The Beak flock 🐦
+
+If you didn't request this email you can just ignore it, or reach out to security@getbeak.app
