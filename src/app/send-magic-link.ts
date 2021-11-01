@@ -36,32 +36,9 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 	const code = `${authCode}.${authKey}`;
 	const emailUrl = `${client.redirectUri}?code=${code}&state=${encodeURIComponent(request.state)}`;
 
-	const emailText = [
-		'🐦 Your Beak magic link is below. Click or paste it into your browser to get going!',
-		'',
+	await sendEmail(ctx, '🐦 Your Beak Magic Link!', request.identifierValue, 'magic-link', {
 		emailUrl,
-		'',
-		'',
-		'If you didn\'t request this email you can just ignore it, or reach out to security@getbeak.app',
-	].join('\n');
-
-	const emailHtml = [
-		'<b>🐦 Your requested Beak magic link!</b>',
-		'',
-		`<a href="${emailUrl}">Get going!</a>`,
-		'',
-		'Enjoy Beak!',
-		'The Beak Team 🐦',
-		'',
-		'',
-		[
-			'If you didn\'t request this email you can just ignore it, or reach out to ',
-			'<a href="mailto:security@getbeak.app">security@getbeak.app</a>.',
-		].join(''),
-		`If the link above doesn't work try this: ${emailUrl}.`,
-	].join('<br />');
-
-	await sendEmail(ctx, '🐦 Your Beak Magic Link!', request.identifierValue, emailText, emailHtml);
+	});
 
 	return null;
 }

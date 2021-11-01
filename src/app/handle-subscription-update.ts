@@ -25,7 +25,6 @@ export default async function handleSubscriptionUpdate(ctx: Context, stpSubscrip
 	);
 
 	// Send email if subscription has ended?
-	// await sendEmail(ctx, 'Welcome to Beak!', customer.email, textBody, htmlBody);
 }
 
 function stpDateToIso(date: number | null) {

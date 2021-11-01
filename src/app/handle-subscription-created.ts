@@ -45,11 +45,8 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 		subscription.status,
 	);
 
-	const textBody = '';
-	const htmlBody = '';
-
 	// Send welcome email
-	await sendEmail(ctx, 'Welcome to Beak!', customer.email, textBody, htmlBody);
+	await sendEmail(ctx, 'Welcome to Beak!', customer.email, 'welcome');
 }
 
 function notEligibleOrPassedCouponRequirement(ctx: Context, subscription: Stripe.Response<Stripe.Subscription>) {
@@ -67,8 +64,5 @@ async function rejectSubscription(ctx: Context, emailAddress: string, subscripti
 		ctx.app.stripeClient.subscriptions.del(subscriptionId, { prorate: true, invoice_now: true }),
 	]);
 
-	const textBody = '';
-	const htmlBody = '';
-
-	await sendEmail(ctx, 'Refund tings!', emailAddress, textBody, htmlBody);
+	await sendEmail(ctx, 'Refund tings!', emailAddress, 'duplicate-subscription');
 }
