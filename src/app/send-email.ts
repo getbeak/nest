@@ -14,8 +14,8 @@ export default async function sendEmail(
 	templateContext: Record<string, string> = {},
 ) {
 	const [html, text] = await Promise.all([
-		fs.readFile(`./data/email-templates/${template}.html`),
-		fs.readFile(`./data/email-templates/${template}.txt`),
+		fs.readFile(`./data/email-templates/${template}.html`, 'utf-8'),
+		fs.readFile(`./data/email-templates/${template}.txt`, 'utf-8'),
 	]);
 
 	const htmlTemplate = compile(html);
