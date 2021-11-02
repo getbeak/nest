@@ -1,11 +1,12 @@
 {
   "name": "nest",
   "version": "1.0.0",
-  "main": "dist/index",
-  "types": "dist/index",
-  "files": [
-    "dist"
-  ],
+  "private": true,
+  "author": {
+    "name": "Alexander Forbes-Reed (0xdeafcafe)",
+    "email": "info@getbeak.app"
+  },
+  "homepage": "https://getbeak.app",
   "scripts": {
     "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
