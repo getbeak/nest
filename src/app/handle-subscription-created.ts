@@ -5,18 +5,25 @@ import Squawk from '../utils/squawk';
 import { getOrCreateUser } from './auth-authorization-code';
 import sendEmail from './send-email';
 
-export default async function handleSubscriptionCreated(ctx: Context, stpSubscriptionId: string) {
-	const subscription = await ctx.app.stripeClient.subscriptions.retrieve(stpSubscriptionId);
-	const customer = await ctx.app.stripeClient.customers.retrieve(subscription.customer as string) as Stripe.Response<Stripe.Customer>;
+type StpResponse<T> = Stripe.Response<T>;
+type StpCustomer = Stripe.Customer;
+type StpSubscription = Stripe.Subscription;
 
-	if (!['active', 'incomplete'].includes(subscription.status)) {
-		// throw new Squawk('subscription_not_valid', { status: subscription.status });
-		return;
-	}
+export default async function handleSubscriptionCreated(ctx: Context, stpSubscriptionId: string) {
+	const stpClient = ctx.app.stripeClient;
+	const subscription = await stpClient.subscriptions.retrieve(stpSubscriptionId);
+	const customer = await stpClient.customers.retrieve(subscription.customer as string) as StpResponse<StpCustomer>;
+
+	if (!['active', 'incomplete'].includes(subscription.status))
+		throw new Squawk('subscription_not_valid', { status: subscription.status });
 
 	// If we're not on prod, ensure that the correct coupon was used to create the subscription
-	if (!notEligibleOrPassedCouponRequirement(ctx, subscription))
+	if (!notEligibleOrPassedCouponRequirement(ctx, subscription)) {
+		// Cancel the subscription
+		await ctx.app.stripeClient.subscriptions.del(subscription.id, { invoice_now: true });
+
 		return;
+	}
 
 	if (!customer.email)
 		throw new Squawk('customer_email_missing');
@@ -26,9 +33,14 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	// Create stripe mapping
 	await ctx.app.dbClient.providerMappings.createOrUpdateMapping(userId, 'stripe', customer.id);
 
-	// Check if they already have a subscription
-	// If they do, cancel, refund, and inform
-	if (await ctx.app.dbClient.subscriptions.findActiveSubscription(userId)) {
+	const activeSubscription = await ctx.app.dbClient.subscriptions.findActiveSubscription(userId);
+
+	// Check if they already have a subscription. if they do, cancel, refund, and inform
+	if (activeSubscription) {
+		// Do nothing if it's the same subscription id
+		if (activeSubscription.stpSubscriptionId === subscription.id)
+			return;
+
 		await rejectSubscription(ctx, customer.email, subscription.id);
 
 		return;
@@ -49,20 +61,21 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	await sendEmail(ctx, 'Welcome to Beak!', customer.email, 'welcome');
 }
 
-function notEligibleOrPassedCouponRequirement(ctx: Context, subscription: Stripe.Response<Stripe.Subscription>) {
+function notEligibleOrPassedCouponRequirement(ctx: Context, subscription: StpResponse<StpSubscription>) {
 	if (ctx.app.config.env === 'prod')
 		return true;
 
 	if (!subscription.discount || !ctx.app.config.requiredCoupon)
 		return true;
 
-	return subscription.discount.coupon.id === ctx.app.config.requiredCoupon;
+	return subscription.discount.promotion_code === ctx.app.config.requiredCoupon;
 }
 
 async function rejectSubscription(ctx: Context, emailAddress: string, subscriptionId: string) {
-	await Promise.all([
-		ctx.app.stripeClient.subscriptions.del(subscriptionId, { prorate: true, invoice_now: true }),
-	]);
+	await ctx.app.stripeClient.subscriptions.del(subscriptionId, {
+		prorate: true,
+		invoice_now: true,
+	});
 
-	await sendEmail(ctx, 'Refund tings!', emailAddress, 'duplicate-subscription');
+	await sendEmail(ctx, 'Duplicate Beak Subscription', emailAddress, 'duplicate-subscription');
 }
