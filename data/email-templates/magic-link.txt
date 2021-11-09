@@ -1,6 +1,6 @@
 🐦 Your Beak magic link is below. Click or paste it into your browser to get going!
 
-{{emailUrl}}
+{{magicLinkUrl}}
 
 ~ The Beak flock 🐦
 

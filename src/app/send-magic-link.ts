@@ -34,10 +34,10 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 	});
 
 	const code = `${authCode}.${authKey}`;
-	const emailUrl = `${client.redirectUri}?code=${code}&state=${encodeURIComponent(request.state)}`;
+	const magicLinkUrl = `${client.redirectUri}?code=${code}&state=${encodeURIComponent(request.state)}`;
 
 	await sendEmail(ctx, '🐦 Your Beak Magic Link!', request.identifierValue, 'magic-link', {
-		emailUrl,
+		magicLinkUrl,
 	});
 
 	return null;
