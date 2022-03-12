@@ -6,6 +6,7 @@ import { Logger } from 'tslog';
 import { App, Context, VersionSet, VersionSets } from '../../types';
 import Squawk from '../../utils/squawk';
 import authenticateUser, { authenticateUserSchema } from './authenticate-user';
+import createTrialAndMagicLink, { createTrialAndMagicLinkSchema } from './create-trial-and-magic-link';
 import enrolAlphaUser, { enrolAlphaUserSchema } from './enrol-alpha-user';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
 import getSubscriptionStatus20201214, { getSubscriptionStatusSchema20201214 } from './get-subscription-status-2020-12-14';
@@ -49,6 +50,10 @@ const v20211006: VersionSet = {
 	get_user: {
 		impl: getUser,
 		schema: getUserSchema,
+	},
+	create_trial_and_magic_link: {
+		impl: createTrialAndMagicLink,
+		schema: createTrialAndMagicLinkSchema,
 	},
 };
 
