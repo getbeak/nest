@@ -11,6 +11,7 @@ export interface Config {
 	jwtPrivateKey: string;
 	stpSecretKey: string;
 	stpWebhookSecret: string;
+	stpSubscriptionPriceId: string;
 	requiredCoupon?: string;
 	mongoUri: string;
 	internalKey: string;

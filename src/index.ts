@@ -67,6 +67,7 @@ function getConfig(): Config {
 		mongoUri: process.env.MONGO_URI ?? 'mongodb://localhost/local-nest-beak',
 		stpSecretKey,
 		stpWebhookSecret,
+		stpSubscriptionPriceId: process.env.STRIPE_SUBSCRIPTION_PRICE_ID ?? 'price_1JhiGIATHKHpwoLyyxI5cCKU',
 	};
 }
 
