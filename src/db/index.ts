@@ -6,6 +6,7 @@ import Identifiers from './identifiers';
 import ProviderMappings from './provider-mappings';
 import RefreshTokens from './refresh-tokens';
 import Subscriptions from './subscriptions';
+import Trials from './trials';
 import Users from './users';
 
 export default class DbClient {
@@ -18,6 +19,7 @@ export default class DbClient {
 	providerMappings!: ProviderMappings;
 	refreshTokens!: RefreshTokens;
 	subscriptions!: Subscriptions;
+	trials!: Trials;
 	users!: Users;
 
 	constructor(mongoUri: string) {
@@ -35,6 +37,7 @@ export default class DbClient {
 		this.providerMappings = new ProviderMappings(this.db);
 		this.refreshTokens = new RefreshTokens(this.db);
 		this.subscriptions = new Subscriptions(this.db);
+		this.trials = new Trials(this.db);
 		this.users = new Users(this.db);
 
 		await this.setupIndexes();
@@ -47,6 +50,7 @@ export default class DbClient {
 		await this.providerMappings.setupIndexes();
 		await this.refreshTokens.setupIndexes();
 		await this.subscriptions.setupIndexes();
+		await this.trials.setupIndexes();
 		await this.users.setupIndexes();
 	}
 }
