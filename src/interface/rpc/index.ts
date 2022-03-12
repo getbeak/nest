@@ -114,7 +114,7 @@ export const runner = async (
 			throw new Squawk('validation_failed', error as Record<string, unknown>);
 		}
 
-		request = camelCaseKeys(originalRequest);
+		request = camelCaseKeys(originalRequest, { deep: true });
 	}
 
 	return await impl(ctx, request);
