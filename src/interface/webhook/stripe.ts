@@ -13,7 +13,7 @@ export async function handleStripeWebhook(
 	if (!event.body)
 		throw new Squawk('missing_webhook_body');
 
-	const signature = event.headers['stripe-signature'];
+	const signature = event.headers['stripe-signature']!;
 	let stpEvent: Stripe.Event;
 
 	try {

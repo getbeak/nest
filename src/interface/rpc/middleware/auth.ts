@@ -13,7 +13,7 @@ export default async function handleAuth(app: App, event: APIGatewayProxyEventV2
 	if (headerIndex < 0)
 		return null;
 
-	const header = Object.values(event.headers)[headerIndex];
+	const header = Object.values(event.headers)[headerIndex] ?? '';
 	const [type, token, ...spare] = header.split(' ');
 
 	if (!token || spare.length > 0)
