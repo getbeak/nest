@@ -36,7 +36,7 @@
   "dependencies": {
     "@aws-sdk/client-ses": "^3.54.0",
     "@cuvva/ksuid": "^1.0.2",
-    "camelcase-keys": "^6.2.2",
+    "camelcase-keys": "^7.0.2",
     "handlebars": "^4.7.7",
     "jsonschema": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
