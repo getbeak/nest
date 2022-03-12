@@ -41,7 +41,7 @@
     "jsonschema": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "snakecase-keys": "^3.2.1",
     "stripe": "^8.209.0",
     "tslog": "^3.3.2"
