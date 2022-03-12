@@ -1,5 +1,6 @@
 import { Db } from 'mongodb';
 
+import { Device } from '../types';
 import Collection from './nest-collection';
 
 export interface AuthorizationCode {
@@ -16,6 +17,7 @@ export interface AuthorizationCode {
 	redirectUri: string;
 	identifierType: 'email';
 	identifierValue: string;
+	device?: Device | null;
 }
 
 export default class Authorizations extends Collection<AuthorizationCode> {

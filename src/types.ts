@@ -79,6 +79,13 @@ export interface SendMagicLinkRequest {
 	codeChallenge: string;
 	identifierType: string;
 	identifierValue: string;
+	device?: Device | null;
+}
+
+export interface Device {
+	platform: 'mac' | 'windows' | 'linux';
+	beakId: string;
+	fingerprint: string;
 }
 
 export interface AuthenticateUserAuthorizationCode {

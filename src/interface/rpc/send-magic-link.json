@@ -46,6 +46,34 @@
 		"identifier_value": {
 			"type": "string",
 			"minLength": 1
+		},
+
+		"device": {
+			"type": "object",
+			"additionalProperties": false,
+		
+			"required": [
+				"platform",
+				"beak_id",
+				"fingerprint"
+			],
+		
+			"properties": {
+				"platform": {
+					"type": "string",
+					"enum": ["mac", "windows", "linux"]
+				},
+
+				"beak_id": {
+					"type": "string",
+					"minLength": 1
+				},
+
+				"fingerprint": {
+					"type": "string",
+					"minLength": 1
+				}
+			}
 		}
 	}
 }

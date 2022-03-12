@@ -31,6 +31,7 @@ export default async function sendMagicLink(ctx: Context, request: SendMagicLink
 		redirectUri: request.redirectUri,
 		identifierType: 'email',
 		identifierValue: request.identifierValue,
+		device: request.device,
 	});
 
 	const code = `${authCode}.${authKey}`;
