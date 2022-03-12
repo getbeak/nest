@@ -1,6 +1,7 @@
 import type { Stripe } from 'stripe';
 
 import { Context } from '../types';
+import { unixToIso } from '../utils/dates';
 import Squawk from '../utils/squawk';
 import { getOrCreateUser } from './auth-authorization-code';
 import sendEmail from './send-email';
@@ -14,7 +15,7 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	const subscription = await stpClient.subscriptions.retrieve(stpSubscriptionId);
 	const customer = await stpClient.customers.retrieve(subscription.customer as string) as StpResponse<StpCustomer>;
 
-	if (!['active', 'incomplete'].includes(subscription.status))
+	if (!['active', 'incomplete', 'trialing'].includes(subscription.status))
 		throw new Squawk('subscription_not_valid', { status: subscription.status });
 
 	// If we're not on prod, ensure that the correct coupon was used to create the subscription
@@ -52,8 +53,8 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 		subscription.items.data[0].plan.product as string,
 		subscription.id,
 		customer.id,
-		new Date(subscription.current_period_start * 1000).toISOString(),
-		new Date(subscription.current_period_end * 1000).toISOString(),
+		unixToIso(subscription.current_period_start),
+		unixToIso(subscription.current_period_end),
 		subscription.status,
 	);
 

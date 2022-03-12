@@ -12,7 +12,7 @@ export interface Subscription {
 	stpSubscriptionId: string;
 	stpCustomerId: string;
 	startsAt: string;
-	endsAt: string;
+	endsAt: string | null;
 	status: string;
 	cancelAt: string | null;
 	cancelType: CancelType | null;
@@ -81,8 +81,7 @@ export default class Subscriptions extends Collection<Subscription> {
 
 		const subscription = await this.collection.findOne({
 			userId,
-			status: { $in: ['active', 'incomplete'] },
-			// @ts-expect-error
+			status: { $in: ['active', 'incomplete', 'trialing', 'past_due'] },
 			endsAt: { $ne: null, $gt: now },
 		}) as unknown as MongoDocument<Subscription>;
 
