@@ -28,7 +28,12 @@ Sends a magic link enabling a user to authenticate!
 	"code_challenge_method": "S256",
 	"code_challenge": "ec088e759677e0f799ccbe2b3a667c16037af08b0e3dff8732edbe1f42f6ef1c",
 	"identifier_type": "email",
-	"identifier_value": "example@getbeak.app"
+	"identifier_value": "example@getbeak.app",
+	"device": {
+		"platform": "mac",
+		"beak_id": "c3f163f8-b9da-41fb-b8e5-59af2ff848cb",
+		"fingerprint": "c601897118286408c19bb71db2cf1087975214cfcc6dd261a552b2779c8a5ec662b9808adfb98dabb7f14e5b0ea1b2c3149be2ffef2f5929758ebec68036bdee"
+	}
 }
 ```
 
@@ -39,6 +44,10 @@ Sends a magic link enabling a user to authenticate!
 - `code_challenge`: A SHA256 digest of the code verifier, which is send in `authenticate_user`. Websafe base64 encoded.
 - `identifier_type`: Always `email`.
 - `identifier_value`: The email address to send the magic link too.
+- `device`: Optional field containing device information
+	- `platform`: The platform Beak is running on.
+	- `beak_id`: The beak specific unique session id.
+	- `fingerprint`: The physical hardware id.
 
 ### `authenticate_user`
 
@@ -178,6 +187,41 @@ Lists the currently available news items for a client.
 	"fallback": null
 }]
 ```
+
+### `create_trial_and_magic_link`
+
+Creates a new user and subscription trial. The magic link sent to the user is trial specific, so it will open the relevant trial onboarding flow when followed.
+
+#### Request
+
+```json
+{
+	"client_id": "client_000000C2kdCzNlbL1BqR5FeMatItU",
+	"redirect_uri": "https://magic.getbeak.app/",
+	"state": "lx/rAzKFsThZ+pqne+uCQZ2OamjZtpW_GtdtUwvEaAg7t",
+	"code_challenge_method": "S256",
+	"code_challenge": "ec088e759677e0f799ccbe2b3a667c16037af08b0e3dff8732edbe1f42f6ef1c",
+	"identifier_type": "email",
+	"identifier_value": "example@getbeak.app",
+	"device": {
+		"platform": "mac",
+		"beak_id": "c3f163f8-b9da-41fb-b8e5-59af2ff848cb",
+		"fingerprint": "c601897118286408c19bb71db2cf1087975214cfcc6dd261a552b2779c8a5ec662b9808adfb98dabb7f14e5b0ea1b2c3149be2ffef2f5929758ebec68036bdee"
+	}
+}
+```
+
+- `client_id`: The ID of the client requesting the magic link.
+- `redirect_uri`: The redirect URI to return too, whitelisted against the client.
+- `state`: A web/url safe nonce generated and stored against the challenge for each requested.
+- `code_challenge_method`: Always `S256`.
+- `code_challenge`: A SHA256 digest of the code verifier, which is send in `authenticate_user`. Websafe base64 encoded.
+- `identifier_type`: Always `email`.
+- `identifier_value`: The email address to send the magic link too.
+- `device`: Optional field containing device information
+	- `platform`: The platform Beak is running on.
+	- `beak_id`: The beak specific unique session id.
+	- `fingerprint`: The physical hardware id.
 
 
 ## Webhooks
