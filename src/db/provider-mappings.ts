@@ -39,8 +39,6 @@ export default class ProviderMappings extends Collection<ProviderMapping> {
 		const id = ksuid.generate('provmap').toString();
 		const now = new Date().toISOString();
 
-		console.log({ userId, providerType, providerValue });
-
 		await this.collection.updateOne({
 			userId,
 			providerType,
