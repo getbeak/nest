@@ -19,7 +19,7 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 		throw new Squawk('subscription_not_valid', { status: subscription.status });
 
 	// If we're not on prod, ensure that the correct coupon was used to create the subscription
-	if (!notEligibleOrPassedCouponRequirement(ctx, subscription)) {
+	if (!checkSubscriptionIsEligible(ctx, subscription)) {
 		// Cancel the subscription
 		await ctx.app.stripeClient.subscriptions.del(subscription.id, { invoice_now: true });
 
@@ -62,12 +62,16 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	await sendEmail(ctx, 'Welcome to Beak!', customer.email, 'welcome');
 }
 
-function notEligibleOrPassedCouponRequirement(ctx: Context, subscription: StpResponse<StpSubscription>) {
+function checkSubscriptionIsEligible(ctx: Context, subscription: StpResponse<StpSubscription>) {
 	if (ctx.app.config.env === 'prod')
 		return true;
 
-	if (!subscription.discount || !ctx.app.config.requiredCoupon)
+	// Allow trials with no discount on nonprod
+	if (subscription.status === 'trialing')
 		return true;
+
+	if (!subscription.discount || !ctx.app.config.requiredCoupon)
+		return false;
 
 	return subscription.discount.promotion_code === ctx.app.config.requiredCoupon;
 }

@@ -47,8 +47,6 @@ export default class Trials extends Collection<Trial> {
 		const id = ksuid.generate('trial').toString();
 		const now = new Date().toISOString();
 
-		console.log(fingerprint, beakId);
-
 		await this.collection.insertOne({
 			_id: id,
 			userId,

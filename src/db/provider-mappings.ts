@@ -9,7 +9,7 @@ export interface ProviderMapping {
 	providerType: 'stripe';
 	providerValue: string;
 	createdAt: string;
-	updatedAt: string;
+	updatedAt: string | null;
 	removedAt: string | null;
 }
 
@@ -39,10 +39,13 @@ export default class ProviderMappings extends Collection<ProviderMapping> {
 		const id = ksuid.generate('provmap').toString();
 		const now = new Date().toISOString();
 
+		console.log({ userId, providerType, providerValue });
+
 		await this.collection.updateOne({
 			userId,
 			providerType,
 			providerValue,
+			removedAt: null,
 		}, {
 			$set: {
 				updatedAt: now,
