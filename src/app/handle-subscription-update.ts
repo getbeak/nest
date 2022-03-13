@@ -4,12 +4,17 @@ import Stripe from 'stripe';
 import { Context } from '../types';
 import Squawk from '../utils/squawk';
 
-export default async function handleSubscriptionUpdate(ctx: Context, stpSubscriptionId: string) {
+export default async function handleSubscriptionUpdate(ctx: Context, stpEventType: string, stpSubscriptionId: string) {
 	const stpSubscription = await ctx.app.stripeClient.subscriptions.retrieve(stpSubscriptionId);
 	const subscription = await ctx.app.dbClient.subscriptions.findByStripeId(stpSubscription.id);
 
-	if (!subscription)
+	if (!subscription) {
+		// If the subscription has been deleted, don't worry about this failing
+		if (stpEventType === 'customer.subscription.deleted')
+			return;
+
 		throw new Squawk('subscription_not_ready');
+	}
 
 	// Update end date/status
 	await ctx.app.dbClient.subscriptions.updateSubscription(

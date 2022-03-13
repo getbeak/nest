@@ -34,7 +34,7 @@ export async function handleStripeWebhook(
 		case 'customer.subscription.deleted': {
 			const subscription = stpEvent.data.object as Record<string, string>;
 
-			await handleSubscriptionUpdate(ctx, subscription.id);
+			await handleSubscriptionUpdate(ctx, stpEvent.type, subscription.id);
 			break;
 		}
 
