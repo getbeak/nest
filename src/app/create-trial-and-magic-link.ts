@@ -33,7 +33,7 @@ async function findExistingUser(ctx: Context, email: string) {
 	try {
 		const identifier = await ctx.app.dbClient.identifiers.findActiveEmailIdentifier(email);
 
-		return ctx.app.dbClient.users.findById(identifier.userId);
+		return await ctx.app.dbClient.users.findById(identifier.userId);
 	} catch (error) {
 		const squawk = Squawk.coerce(error);
 
