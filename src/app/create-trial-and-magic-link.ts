@@ -2,10 +2,11 @@ import { User } from '../db/users';
 import { Context, Device, SendMagicLinkRequest } from '../types';
 import { unixToIso } from '../utils/dates';
 import Squawk from '../utils/squawk';
+import { getOrCreateUser } from './auth-authorization-code';
 import sendMagicLink from './send-magic-link';
 
 export default async function createTrialAndMagicLink(ctx: Context, request: SendMagicLinkRequest) {
-	const user = await findExistingUser(ctx, request.identifierValue);
+	const user = await findExistingUser(ctx, request.identifierValue.toLocaleLowerCase());
 
 	if (user) {
 		// Check if user has a subscription (trialing or not)
@@ -22,7 +23,7 @@ export default async function createTrialAndMagicLink(ctx: Context, request: Sen
 	}
 
 	// Create trial
-	await createTrial(ctx, user, request.identifierValue, request.device!);
+	await createTrial(ctx, user, request.identifierValue.toLocaleLowerCase(), request.device!);
 
 	// Send trial magic link
 	return await sendMagicLink(ctx, request);
@@ -45,7 +46,7 @@ async function findExistingUser(ctx: Context, email: string) {
 
 async function createTrial(ctx: Context, user: User | null, email: string, device: Device) {
 	// Get or Create Beak User
-	const userId = user ? user.id : await ctx.app.dbClient.users.createUser();
+	const userId = user ? user.id : await getOrCreateUser(ctx, email);
 
 	// Create Stripe Customer
 	const stpCustomer = await ctx.app.stripeClient.customers.create({

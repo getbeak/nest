@@ -37,7 +37,7 @@ export default class Identifiers extends Collection<Identifier> {
 		await this.collection.insertOne({
 			_id: id,
 			identifierType,
-			identifierValue,
+			identifierValue: identifierValue.toLocaleLowerCase(),
 			userId,
 			createdAt: now,
 			updatedAt: null,
@@ -57,7 +57,7 @@ export default class Identifiers extends Collection<Identifier> {
 	async findActiveEmailIdentifier(email: string) {
 		const identifier = await this.collection.findOne({
 			identifierType: 'email',
-			identifierValue: email,
+			identifierValue: email.toLocaleLowerCase(),
 		});
 
 		if (!identifier)
