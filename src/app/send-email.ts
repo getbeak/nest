@@ -4,7 +4,7 @@ import { compile } from 'handlebars';
 
 import { Context } from '../types';
 
-type Template = 'welcome' | 'magic-link' | 'duplicate-subscription';
+type Template = 'welcome' | 'welcome-trial' | 'magic-link' | 'duplicate-subscription';
 
 export default async function sendEmail(
 	ctx: Context,

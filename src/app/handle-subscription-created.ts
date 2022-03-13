@@ -59,7 +59,10 @@ export default async function handleSubscriptionCreated(ctx: Context, stpSubscri
 	);
 
 	// Send welcome email
-	await sendEmail(ctx, 'Welcome to Beak!', customer.email, 'welcome');
+	if (subscription.status === 'trialing')
+		await sendEmail(ctx, 'Your Beak Trial has begun!', customer.email, 'welcome-trial');
+	else
+		await sendEmail(ctx, 'Welcome to Beak!', customer.email, 'welcome');
 }
 
 function checkSubscriptionIsEligible(ctx: Context, subscription: StpResponse<StpSubscription>) {
