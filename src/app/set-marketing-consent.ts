@@ -5,8 +5,6 @@ import { ConsentLevel } from '../db/marketing-consent';
 import { Context, SetMarketingConsentRequest } from '../types';
 
 export default async function setMarketingConsent(ctx: Context, request: SetMarketingConsentRequest): Promise<void> {
-	console.log(request);
-
 	const user = await ctx.app.dbClient.users.findUser(request.userId);
 	const identifiers = await ctx.app.dbClient.identifiers.listUserIdentifiers(user.id);
 	const emails = identifiers.filter(i => i.identifierType === 'email' && !i.removedAt);
