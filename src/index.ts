@@ -1,4 +1,5 @@
 import ksuid from '@cuvva/ksuid';
+import mailchimpMarketing from '@mailchimp/mailchimp_marketing';
 import type {
 	APIGatewayProxyEventV2,
 	APIGatewayProxyStructuredResultV2,
@@ -54,9 +55,18 @@ function getConfig(): Config {
 
 	const stpSecretKey = process.env.STRIPE_SECRET_KEY;
 	const stpWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+	const mailchimpApiKey = process.env.MAILCHIMP_API_KEY;
 
 	if (!stpSecretKey || !stpWebhookSecret)
 		throw new Squawk('missing_stripe_config');
+
+	if (!mailchimpApiKey)
+		throw new Squawk('mailchimp_api_key');
+
+	mailchimpMarketing.setConfig({
+		apiKey: mailchimpApiKey,
+		server: 'us2',
+	});
 
 	return {
 		env,
@@ -68,6 +78,7 @@ function getConfig(): Config {
 		stpSecretKey,
 		stpWebhookSecret,
 		stpSubscriptionPriceId: process.env.STRIPE_SUBSCRIPTION_PRICE_ID ?? 'price_1JhiGIATHKHpwoLyyxI5cCKU',
+		mailchimpApiKey,
 	};
 }
 
