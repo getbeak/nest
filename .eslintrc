@@ -183,7 +183,7 @@
 		"yield-star-spacing": 1,
 		"yoda": 1,
 
-		"simple-import-sort/sort": 1,
+		"simple-import-sort/imports": ["error", { "groups": [["^react", "^@?\\w"]] }],
 
 		"@typescript-eslint/adjacent-overload-signatures": "error",
 		"@typescript-eslint/array-type": "error",
@@ -228,8 +228,7 @@
 		"@typescript-eslint/no-namespace": "error",
 		"@typescript-eslint/no-parameter-properties": "error",
 		"@typescript-eslint/triple-slash-reference": [1, { "path": "never", "types": "never", "lib": "never" }],
-		"@typescript-eslint/no-unused-vars": "off",
-		"@typescript-eslint/no-unused-vars-experimental":"warn",
+		"@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
 		"@typescript-eslint/no-use-before-define": [1, { "functions": false }],
 		"@typescript-eslint/no-var-requires": "error",
 		"@typescript-eslint/restrict-plus-operands": "error",
