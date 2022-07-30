@@ -22,8 +22,11 @@ export default async function setMarketingConsent(ctx: Context, request: SetMark
 }
 
 async function setMailchimpMarketingLevel(email: string, hash: string, level: ConsentLevel) {
-	await mailchimpMarketing.lists.updateListMember('e580e6811f', hash, {
+	const mailchimpStatus = level === 'none' ? 'unsubscribed' : 'subscribed';
+
+	await mailchimpMarketing.lists.setListMember('e580e6811f', hash, {
 		email_address: email,
-		status: level === 'none' ? 'unsubscribed' : 'subscribed',
+		status_if_new: mailchimpStatus,
+		status: mailchimpStatus,
 	});
 }
