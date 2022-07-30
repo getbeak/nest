@@ -3,6 +3,7 @@ import { Db, MongoClient } from 'mongodb';
 import AccessTokens from './access-tokens';
 import Authorizations from './authorizations';
 import Identifiers from './identifiers';
+import MarketingConsents from './marketing-consent';
 import ProviderMappings from './provider-mappings';
 import RefreshTokens from './refresh-tokens';
 import Subscriptions from './subscriptions';
@@ -16,6 +17,7 @@ export default class DbClient {
 	accessTokens!: AccessTokens;
 	authorizations!: Authorizations;
 	identifiers!: Identifiers;
+	marketingConsent!: MarketingConsents;
 	providerMappings!: ProviderMappings;
 	refreshTokens!: RefreshTokens;
 	subscriptions!: Subscriptions;
@@ -34,6 +36,7 @@ export default class DbClient {
 		this.authorizations = new Authorizations(this.db);
 		this.accessTokens = new AccessTokens(this.db);
 		this.identifiers = new Identifiers(this.db);
+		this.marketingConsent = new MarketingConsents(this.db);
 		this.providerMappings = new ProviderMappings(this.db);
 		this.refreshTokens = new RefreshTokens(this.db);
 		this.subscriptions = new Subscriptions(this.db);
@@ -47,6 +50,7 @@ export default class DbClient {
 		await this.authorizations.setupIndexes();
 		await this.accessTokens.setupIndexes();
 		await this.identifiers.setupIndexes();
+		await this.marketingConsent.setupIndexes();
 		await this.providerMappings.setupIndexes();
 		await this.refreshTokens.setupIndexes();
 		await this.subscriptions.setupIndexes();

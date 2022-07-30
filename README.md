@@ -224,6 +224,28 @@ Creates a new user and subscription trial. The magic link sent to the user is tr
 	- `fingerprint`: The physical hardware id.
 
 
+### `get_marketing_consent`
+
+Returns the selected marketing consent level for a user. An error with the code `awaiting_consent` will be returned if the user hasn't set a consent level yet.
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C2kdCzNlbL1BqR5FeMatItU"
+}
+```
+
+#### Response
+
+```json
+{
+	"level": "general"
+}
+```
+
+- `level`: The consent level selected. Either `general` or `none`.
+
 ## Webhooks
 
 Webhooks URL's comprise of two parts; the webhook indicator, followed by the provider value. Each provider has an example below.

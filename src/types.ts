@@ -1,5 +1,6 @@
 import { SESClient } from '@aws-sdk/client-ses';
-import { CancelType } from 'db/subscriptions';
+import { ConsentLevel } from './db/marketing-consent';
+import { CancelType } from './db/subscriptions';
 import { Stripe } from 'stripe';
 import { Logger } from 'tslog';
 
@@ -145,6 +146,19 @@ export interface GetUserResponse {
 		verifiedAt: string | null;
 		removedAt: string | null;
 	}[];
+}
+
+export interface GetMarketingConsentRequest {
+	userId: string;
+}
+
+export interface GetMarketingConsentResponse {
+	level: ConsentLevel;
+}
+
+export interface SetMarketingConsentRequest {
+	userId: string;
+	level: ConsentLevel;
 }
 
 export interface EnrolAlphaUserRequest {

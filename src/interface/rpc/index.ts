@@ -1,5 +1,5 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import camelCaseKeys from 'camelcase-keys';
+import * as camelCaseKeys from 'camelcase-keys';
 import { validate } from 'jsonschema';
 import { Logger } from 'tslog';
 
@@ -8,6 +8,7 @@ import Squawk from '../../utils/squawk';
 import authenticateUser, { authenticateUserSchema } from './authenticate-user';
 import createTrialAndMagicLink, { createTrialAndMagicLinkSchema } from './create-trial-and-magic-link';
 import enrolAlphaUser, { enrolAlphaUserSchema } from './enrol-alpha-user';
+import getMarketingConsent, { getMarketingConsentSchema } from './get-marketing-consent';
 import getSubscriptionStatus, { getSubscriptionStatusSchema } from './get-subscription-status';
 import getSubscriptionStatus20201214, { getSubscriptionStatusSchema20201214 } from './get-subscription-status-2020-12-14';
 import getUser, { getUserSchema } from './get-user';
@@ -26,6 +27,10 @@ const v20201214: VersionSet = {
 	authenticate_user: {
 		impl: authenticateUser,
 		schema: authenticateUserSchema,
+	},
+	get_marketing_consent: {
+		impl: getMarketingConsent,
+		schema: getMarketingConsentSchema,
 	},
 	get_subscription_status: {
 		impl: getSubscriptionStatus20201214,
