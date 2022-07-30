@@ -246,6 +246,19 @@ Returns the selected marketing consent level for a user. An error with the code 
 
 - `level`: The consent level selected. Either `general` or `none`.
 
+### `set_marketing_consent`
+
+Returns the selected marketing consent level for a user. An error with the code `awaiting_consent` will be returned if the user hasn't set a consent level yet.
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C2kdCzNlbL1BqR5FeMatItU",
+	"level": "general"
+}
+```
+
 ## Webhooks
 
 Webhooks URL's comprise of two parts; the webhook indicator, followed by the provider value. Each provider has an example below.
@@ -325,7 +338,19 @@ interface Identifiers {
 }
 ```
 
-### `provider_mappings`
+### `marketing-consent`
+
+```ts
+interface MarketingConsent {
+	id: string;
+	userId: string;
+	level: 'none' | 'general';
+	createdAt: string;
+	updatedAt: string | null;
+}
+```
+
+### `provider-mappings`
 
 ```ts
 interface ExternalMappings {
@@ -338,7 +363,7 @@ interface ExternalMappings {
 }
 ```
 
-### `refresh_tokens`
+### `refresh-tokens`
 
 ```ts
 interface RefreshTokens {

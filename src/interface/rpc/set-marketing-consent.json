@@ -1,0 +1,21 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+
+	"required": [
+		"user_id",
+		"level"
+	],
+
+	"properties": {
+		"user_id": {
+			"type": "string",
+			"minLength": 1
+		},
+
+		"level": {
+			"type": "string",
+			"enum": ["none", "general"]
+		}
+	}
+}

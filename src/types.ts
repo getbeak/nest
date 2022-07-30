@@ -1,10 +1,10 @@
 import { SESClient } from '@aws-sdk/client-ses';
-import { ConsentLevel } from './db/marketing-consent';
-import { CancelType } from './db/subscriptions';
 import { Stripe } from 'stripe';
 import { Logger } from 'tslog';
 
 import DbClient from './db';
+import { ConsentLevel } from './db/marketing-consent';
+import { CancelType } from './db/subscriptions';
 
 export interface Config {
 	env: string;
@@ -13,6 +13,7 @@ export interface Config {
 	stpSecretKey: string;
 	stpWebhookSecret: string;
 	stpSubscriptionPriceId: string;
+	mailchimpApiKey: string;
 	requiredCoupon?: string;
 	mongoUri: string;
 	internalKey: string;

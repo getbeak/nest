@@ -36,7 +36,6 @@ export default class MarketingConsents extends Collection<MarketingConsent> {
 				_id: id,
 				userId,
 				createdAt: now,
-				removedAt: null,
 			},
 		}, { upsert: true });
 	}

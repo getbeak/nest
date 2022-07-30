@@ -1,5 +1,5 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import * as camelCaseKeys from 'camelcase-keys';
+import camelCaseKeys from 'camelcase-keys';
 import { validate } from 'jsonschema';
 import { Logger } from 'tslog';
 
@@ -15,18 +15,19 @@ import getUser, { getUserSchema } from './get-user';
 import listNewsItems, { listNewsItemsSchema } from './list-news-items';
 import handleAuth from './middleware/auth';
 import sendMagicLink, { sendMagicLinkSchema } from './send-magic-link';
+import setMarketingConsent, { setMarketingConsentSchema } from './set-marketing-consent';
 
 const urlRegex = /^\/(\d)\/([\d-]+)\/(.+)$/;
 const qualifierRegex = /^\/\d\/[\d-]+\//;
 
 const v20201214: VersionSet = {
-	send_magic_link: {
-		impl: sendMagicLink,
-		schema: sendMagicLinkSchema,
-	},
 	authenticate_user: {
 		impl: authenticateUser,
 		schema: authenticateUserSchema,
+	},
+	enrol_alpha_user: {
+		impl: enrolAlphaUser,
+		schema: enrolAlphaUserSchema,
 	},
 	get_marketing_consent: {
 		impl: getMarketingConsent,
@@ -36,13 +37,17 @@ const v20201214: VersionSet = {
 		impl: getSubscriptionStatus20201214,
 		schema: getSubscriptionStatusSchema20201214,
 	},
-	enrol_alpha_user: {
-		impl: enrolAlphaUser,
-		schema: enrolAlphaUserSchema,
-	},
 	list_news_items: {
 		impl: listNewsItems,
 		schema: listNewsItemsSchema,
+	},
+	send_magic_link: {
+		impl: sendMagicLink,
+		schema: sendMagicLinkSchema,
+	},
+	set_marketing_consent: {
+		impl: setMarketingConsent,
+		schema: setMarketingConsentSchema,
 	},
 };
 
