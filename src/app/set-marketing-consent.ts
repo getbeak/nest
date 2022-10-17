@@ -1,5 +1,6 @@
 import mailchimpMarketing from '@mailchimp/mailchimp_marketing';
 import crypto from 'crypto';
+import Squawk from 'utils/squawk';
 
 import { ConsentLevel } from '../db/marketing-consent';
 import { Context, SetMarketingConsentRequest } from '../types';
@@ -15,18 +16,24 @@ export default async function setMarketingConsent(ctx: Context, request: SetMark
 			.update(e.identifierValue)
 			.digest('hex');
 
-		await setMailchimpMarketingLevel(e.identifierValue, digest, request.level);
+		await setMailchimpMarketingLevel(ctx, e.identifierValue, digest, request.level);
 	}));
 
 	await ctx.app.dbClient.marketingConsent.upsertMarketingConsent(user.id, request.level);
 }
 
-async function setMailchimpMarketingLevel(email: string, hash: string, level: ConsentLevel) {
+async function setMailchimpMarketingLevel(ctx: Context, email: string, hash: string, level: ConsentLevel) {
 	const mailchimpStatus = level === 'none' ? 'unsubscribed' : 'subscribed';
 
-	await mailchimpMarketing.lists.setListMember('e580e6811f', hash, {
-		email_address: email,
-		status_if_new: mailchimpStatus,
-		status: mailchimpStatus,
-	});
+	try {
+		await mailchimpMarketing.lists.setListMember('e580e6811f', hash, {
+			email_address: email,
+			status_if_new: mailchimpStatus,
+			status: mailchimpStatus,
+		});
+	} catch (error) {
+		ctx.logger.error('mailchimp set list member failure', error);
+
+		throw new Squawk('mailchimp_set_failure');
+	}
 }

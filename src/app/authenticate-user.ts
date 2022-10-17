@@ -8,7 +8,7 @@ import { handleAuthorizationCode, validateAuthorizationCode } from './auth-autho
 import { handleRefreshToken, validateRefreshToken } from './auth-refresh-token';
 import { getClient } from './clients';
 
-const accessTokenExpiry = 3600; // 60 minutes
+const accessTokenExpiry = 864000; // 24 hours
 const refreshTokenExpiry = 31536000; // 365 days
 
 export default async function authenticateUser(
